@@ -4,7 +4,7 @@ import os
 import re
 import traceback
 
-from tracker__client import Severr
+from trakerr__client import Trakerr
 
 
 

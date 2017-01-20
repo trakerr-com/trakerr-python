@@ -6,4 +6,8 @@ class trakerr_handler(logging.Handler):
     def __init__(self, client = None, level = logging.ERROR, api_key = None, envroment = None, url = None):
         raise NotImplementedError
 
+    def emit(self, record):
+        raise NotImplementedError
 
+    def format_record(self, record):
+        raise NotImplementedError
