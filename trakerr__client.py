@@ -1,9 +1,9 @@
 # coding: utf-8
 
 """
-    Trakerr Client API
+    trakerr Client API
 
-    Get your application events and errors to Trakerr via the *Trakerr API*.
+    Get your application events and errors to trakerr via the *trakerr API*.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -24,50 +24,71 @@ from __builtin__ import *  #My interpreter was shirking adding this automaticall
 import sys
 import os
 import re
+import platform
 
 # python 2 and python 3 compatibility library
-from six import iteritems
+from six import *
 
-from trakerr_client import ApiClient
-from trakerr_client import EventsApi
+#might want to clean up imports?
+from trakerr_client import ApiClient, EventsApi
 from trakerr_client.apis import events_api
 from trakerr_client.models import *
-from event_trace_builder import EventTraceBuilder, Trakerr_Utils
+from event_trace_builder import EventTraceBuilder, trakerrUtils
 from datetime import datetime, timedelta
 
 
-class Trakerr(object):
+class trakerr(object):
     """
     The public facing class that will log errors.
 
-    A use case is:
-    >>>from trakerr__client import Trakerr
+    A standard use case without the handler is:
+    >>>from trakerr__client import trakerr
     >>>...
-    >>>l = Trakerr()
+    >>>l = trakerr("API Key", "URL", "app_version", "env_name")
     >>>...
     >>>try:
     >>>   ...
     >>>except:
-    >>>   l.log("Optional Error String")
+    >>>   l.log()
     """
 
-    def __init__(self): #Add args
-        raise NotImplementedError
-        
+    def __init__(self, api_key, url, app_version, datacenter = None, datacenter_region = None):
+        """
+        """
+        if not isinstance(api_key, string_types) or not isinstance(url, string_types) or not isinstance(app_version, string_types):
+            raise TypeError("Arguments are expected strings.")
+
+        self.Api_Key = str(api_key)
+        self.URL = str(url)
+        self.App_Version = str(app_version)
+        if datacenter is not None: datacenter = str(datacenter)
+        self.Datacenter = datacenter
+        if datacenter_region is not None: datacenter_region = str(datacenter_region)
+        self.Datacenter_Region = datacenter_region
 
     def log(self, classification = "Error", error_type = None, error_message = None, exc_info = None):
         """
         
         """
+
         #consider a configuration file for later. Removed my personal data for pushes for now.
+        client = trakerrClient(self.Api_Key, self.URL, self.App_Version, platform.python_implementation(), platform.python_version(),
+                              platform.node(), platform.system() + " " + platform.release(), platform.version(), self.Datacenter, self.Datacenter_Region)
+        #Fix last 2 args up above ^, confirm other imes
+
 
         
         try:
             if exc_info is None: exc_info = sys.exc_info()
             if exc_info is not False:
+                #Add check for exc_info here.
                 type, value = exc_info[:2]
-                if error_type is None: Trakerr_Utils.format_error_name(type)
-                if error_message is None: str(value)
+                if error_type is None: error_type = trakerrUtils.format_error_name(type)
+                if error_message is None: error_message = str(value)
+
+            if not isinstance(classification, string_types) or not isinstance(error_type, string_types) or not isinstance(error_message, string_types):
+                raise  TypeError("Arguments are expected strings.") #Do the type check before you creat a new event, hence why we can't merge the two if not false statements
+
             excevent = client.create_new_app_event(classification, error_type, error_message)
 
             if exc_info is not False:
@@ -78,7 +99,7 @@ class Trakerr(object):
             del exc_info
 
 
-class TrakerrClient(object):
+class trakerrClient(object):
     """
     Description of class
     """
@@ -103,6 +124,9 @@ class TrakerrClient(object):
                  context_appos=None, context_appos_version=None, context_datacenter=None,
                  context_datacenter_region=None):
         """
+
+        :param context_env_name: The string name of the enviroment the code is running on.
+        :param context_env_version: The string version of the enviroment the code is running on.
         """
 
         self.api_Key = api_key

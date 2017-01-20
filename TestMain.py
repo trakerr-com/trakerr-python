@@ -4,7 +4,7 @@ import os
 import re
 import traceback
 
-from trakerr__client import Trakerr
+from tracker__client import Severr
 
 
 
@@ -12,11 +12,10 @@ def main(argv=None):#Test Main, to be removed
     if argv is None:
         argv = sys.argv
 
-    l = Trakerr()
     try:
-        raise ArithmeticError("An Error Occurred.")
+        raise EnvironmentError("Test Bug.")
     except:
-        l.log("Test bug")
+        l.log()
         
 
 

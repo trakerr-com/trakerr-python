@@ -61,7 +61,7 @@ class EventTraceBuilder(object):
 
             e_type, value, tb = exc_info
             newTrace.trace_lines = self.get_event_tracelines(tb)
-            newTrace.type = Trakerr_Utils.format_error_name(e_type)
+            newTrace.type = TrakerrUtils.format_error_name(e_type)
             newTrace.message = str(value)
             trace_list.append(newTrace)
         finally:
@@ -85,7 +85,7 @@ class EventTraceBuilder(object):
 
 
 
-class Trakerr_Utils(object):
+class TrakerrUtils(object):
 
     @classmethod
     def format_error_name(self, error_type):
