@@ -110,6 +110,3 @@ class TrakerrUtils(object):
         """
 
         raise NotImplementedError("Method not implemented currently.")
-     
-
-

@@ -37,7 +37,7 @@ from event_trace_builder import EventTraceBuilder, TrakerrUtils
 from datetime import datetime, timedelta
 
 
-class Trakerr(object):
+class TrakerrSend(object):
     """
     The public facing class that will log errors.
 
@@ -66,15 +66,15 @@ class Trakerr(object):
         if datacenter_region is not None: datacenter_region = str(datacenter_region)
         self.Datacenter_Region = datacenter_region
 
-    def log(self, classification = "Error", error_type = None, error_message = None, exc_info = None):
+    def log(self, classification = "ERROR", error_type = None, error_message = None, exc_info = None):
         """
         
         """
 
         #consider a configuration file for later. Removed my personal data for pushes for now.
-        client = trakerrClient(self.Api_Key, self.URL, self.App_Version, platform.python_implementation(), platform.python_version(),
+        client = TrakerrClient(self.Api_Key, self.URL, self.App_Version, platform.python_implementation(), platform.python_version(),
                               platform.node(), platform.system() + " " + platform.release(), platform.version(), self.Datacenter, self.Datacenter_Region)
-        #Fix last 2 args up above ^, confirm other imes
+        #Fix last 2 args up above ^, confirm other itmes
 
 
         
@@ -99,7 +99,7 @@ class Trakerr(object):
             del exc_info
 
 
-class trakerrClient(object):
+class TrakerrClient(object):
     """
     Description of class
     """
@@ -145,7 +145,7 @@ class trakerrClient(object):
             client = ApiClient(url_path)
         self.events_api = EventsApi(client)
 
-    def create_new_app_event(self, classification="Error", eventType="unknown",
+    def create_new_app_event(self, classification="ERROR", eventType="unknown",
                              eventMessage="unknown"):  # Default None the arguments if they're not required?
         """
         """
