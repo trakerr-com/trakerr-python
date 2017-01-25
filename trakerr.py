@@ -3,7 +3,10 @@
 from trakerr_handler import TrakerrHandler
 
 class Trakerr(object):
-    """description of class"""
+    """
+    description of class
+    """
+
     @classmethod
     def has_trakerr_handler(self, logger):
         """
@@ -16,8 +19,7 @@ class Trakerr(object):
         """
         logger = logging.getLogger(name)
 
-        if not self.has_trakerr_handler(logger):
+        if not Trakerr.has_trakerr_handler(logger):
             th = TrakerrHandler(api_key, app_version, url, level, datacenter, datacenter_region)
             logger.addHandler(th)
         return logger
-

@@ -33,7 +33,8 @@ from six import *
 from trakerr_client import ApiClient, EventsApi
 from trakerr_client.apis import events_api
 from trakerr_client.models import *
-from event_trace_builder import EventTraceBuilder, TrakerrUtils
+from event_trace_builder import EventTraceBuilder
+from trakerr_utils import TrakerrUtils
 from datetime import datetime, timedelta
 
 
@@ -81,7 +82,7 @@ class TrakerrSend(object):
         try:
             if exc_info is None: exc_info = sys.exc_info()
             if exc_info is not False:
-                #Add check for exc_info here.
+                #TODO: Add check for exc_info here.
                 type, value = exc_info[:2]
                 if error_type is None: error_type = TrakerrUtils.format_error_name(type)
                 if error_message is None: error_message = str(value)
