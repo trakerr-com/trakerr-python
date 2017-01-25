@@ -46,6 +46,7 @@ class EventTraceBuilder(object):
         try:
             if exc_info is None: exc_info = sys.exc_info()
 
+            #TODO: Add check for exc_info
             self.add_stack_trace(trace, exc_info)
             return trace
         finally:
@@ -58,6 +59,9 @@ class EventTraceBuilder(object):
 
         try:
             if exc_info is None: exc_info = sys.exc_info()
+
+            if not isinstance(trace_list, Stacktrace):#TODO: Add check for exc_info
+                raise TypeError("An argument is not the correct type.")
             newTrace = InnerStackTrace()
 
             e_type, value, tb = exc_info

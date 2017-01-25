@@ -53,18 +53,17 @@ class TrakerrSend(object):
     >>>   l.log()
     """
 
-    def __init__(self, api_key, url, app_version, datacenter = None, datacenter_region = None):
+    def __init__(self, api_key, app_version, url = TrakerrUtils.SERVER_URL, datacenter = None, datacenter_region = None):
         """
         """
-        if not isinstance(api_key, string_types) or not isinstance(url, string_types) or not isinstance(app_version, string_types):
+        if (not isinstance(api_key, string_types) or not isinstance(url, string_types) or not isinstance(app_version, string_types)
+                or (datacenter is not None and not isinstance(datacenter, string_types)) or (datacenter_region is not None and not isinstance(datacenter_region, string_types))):
             raise TypeError("Arguments are expected strings.")
 
-        self.Api_Key = str(api_key)
-        self.URL = str(url)
-        self.App_Version = str(app_version)
-        if datacenter is not None: datacenter = str(datacenter)
+        self.Api_Key = api_key
+        self.URL = url
+        self.App_Version = app_version
         self.Datacenter = datacenter
-        if datacenter_region is not None: datacenter_region = str(datacenter_region)
         self.Datacenter_Region = datacenter_region
 
     def log(self, classification = "ERROR", error_type = None, error_message = None, exc_info = None):
@@ -75,14 +74,11 @@ class TrakerrSend(object):
         #consider a configuration file for later. Removed my personal data for pushes for now.
         client = TrakerrClient(self.Api_Key, self.URL, self.App_Version, platform.python_implementation(), platform.python_version(),
                               platform.node(), platform.system() + " " + platform.release(), platform.version(), self.Datacenter, self.Datacenter_Region)
-        #Fix last 2 args up above ^, confirm other itmes
-
-
-        
+      
         try:
             if exc_info is None: exc_info = sys.exc_info()
             if exc_info is not False:
-                #TODO: Add check for exc_info here.
+                #//TODO: Add check for exc_info here.
                 type, value = exc_info[:2]
                 if error_type is None: error_type = TrakerrUtils.format_error_name(type)
                 if error_message is None: error_message = str(value)
@@ -130,6 +126,15 @@ class TrakerrClient(object):
         :param context_env_version: The string version of the enviroment the code is running on.
         """
 
+        test8 = (context_datacenter_region is not None and isinstance(context_datacenter_region, string_types))
+        if ((api_key is not None and not isinstance(api_key, string_types)) or (url_path is not None and not isinstance(url_path, string_types))
+                or (context_app_version is not None and not isinstance(context_app_version, string_types)) or not isinstance(context_env_name, string_types)
+                or (context_env_hostname is not None and not isinstance(context_env_hostname, string_types)) or (context_appos is not None and not isinstance(context_appos, string_types))
+                or (context_appos_version is not None and not isinstance(context_appos_version, string_types)) 
+                or (context_datacenter is not None and not isinstance(context_datacenter, string_types))
+                or (context_datacenter_region is not None and not isinstance(context_datacenter_region, string_types))):
+            raise TypeError("Arguments are expected strings")
+
         self.api_Key = api_key
 
         self.context_App_Version = context_app_version
@@ -146,16 +151,20 @@ class TrakerrClient(object):
             client = ApiClient(url_path)
         self.events_api = EventsApi(client)
 
-    def create_new_app_event(self, classification="ERROR", eventType="unknown",
-                             eventMessage="unknown"):  # Default None the arguments if they're not required?
+    def create_new_app_event(self, classification="ERROR", event_type="unknown",
+                             event_message="unknown"):  # Default None the arguments if they're not required?
         """
         """
+        if not isinstance(classification, string_types) or not isinstance(event_type, string_types) or not isinstance(event_message, string_types):
+            raise TypeError("Arguments are expected strings.")
 
-        return AppEvent(self.api_Key, classification, eventType, eventMessage)
+        return AppEvent(self.api_Key, classification, event_type, event_message)
 
     def send_event(self, app_event):
         """
         """
+        if not isinstance(app_event, AppEvent):
+            raise TypeError("Argument is expected of class AppEvent.")
 
         self.fill_defaults(app_event)
         self.events_api.events_post(app_event)
@@ -173,6 +182,9 @@ class TrakerrClient(object):
         """
         """
 
+        if not isinstance(app_event, AppEvent):
+            raise TypeError("Argument is expected of class AppEvent.")
+
         self.fill_defaults(app_event)
         self.events_api.events_post(app_event, callback=self.async_callback)
 
@@ -186,6 +198,9 @@ class TrakerrClient(object):
         :param app_event:  The app event to fill parameters out.
         :return: The given AppEvent object after it is checked and filled out.
         """
+
+        if not isinstance(app_event, AppEvent):
+            raise TypeError("Argument is expected of class AppEvent.")
 
         if app_event.api_key is None: app_event.apiKey = self.api_Key
 

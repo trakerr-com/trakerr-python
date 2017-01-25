@@ -1,6 +1,7 @@
 ﻿import logging
 
 from trakerr_handler import TrakerrHandler
+from trakerr_utils import TrakerrUtils
 
 class Trakerr(object):
     """
@@ -14,7 +15,7 @@ class Trakerr(object):
         return any([isinstance(handler, TrakerrHandler) for handler in logger.handlers])
 
     @classmethod
-    def getLogger(self, api_key, app_version, name, url = "http://ec2-52-91-176-104.compute-1.amazonaws.com/api/v1", level = logging.ERROR, datacenter = None, datacenter_region = None):
+    def getLogger(self, api_key, app_version, name, url = TrakerrUtils.SERVER_URL, level = logging.ERROR, datacenter = None, datacenter_region = None):
         """
         """
         logger = logging.getLogger(name)

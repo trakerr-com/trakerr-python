@@ -1,10 +1,11 @@
 ﻿import logging
 from trakerr__client import TrakerrSend
+from trakerr_utils import TrakerrUtils
 
 class TrakerrHandler(logging.Handler):
     """description of class"""
 
-    def __init__(self, api_key,  app_version, url = "http://ec2-52-91-176-104.compute-1.amazonaws.com/api/v1", level = logging.ERROR, datacenter = None, datacenter_region = None, client = None):
+    def __init__(self, api_key,  app_version, url = TrakerrUtils.SERVER_URL, level = logging.ERROR, datacenter = None, datacenter_region = None, client = None):
         """
         Ether client or the args after clients must be not none.
         """
@@ -13,7 +14,7 @@ class TrakerrHandler(logging.Handler):
         if isinstance(client, TrakerrSend):
             self.trakerr_client = client
         else:
-            self.trakerr_client = TrakerrSend(api_key, url, app_version, datacenter, datacenter_region)
+            self.trakerr_client = TrakerrSend(api_key, app_version, url, datacenter, datacenter_region)
 
     def emit(self, record):
         """
