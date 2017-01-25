@@ -55,7 +55,7 @@ from trakerr import Trakerr
 And then you can get a python logger object that ties in to trakerr to handle the various levels of errors, giving the appropriate data as strings. 
 
 ```python
-def main(argv=None):#Test Main
+def main(argv=None):
     if argv is None:
         argv = sys.argv
 
@@ -77,7 +77,7 @@ from trakerr_handler import TrakerrHandler
 
 And then you'll need to create a handler and a logger object and attach them before you can use them later on.
 ```python
-def main(argv=None):#Test Main.
+def main(argv=None):
     logger = logging.getLogger("Logger name")
     th = TrakerrHandler("API Key here", "App Version Number")
     logger.addHandler(th)
@@ -98,7 +98,7 @@ from trakerr__client import Trakerr
 Once you've imported trakerr, you can simply instantiate the class and call log, or pass more info into the function.
 
 ```python
-def main(argv=None):#Test Main
+def main(argv=None):
     if argv is None:
         argv = sys.argv
         
