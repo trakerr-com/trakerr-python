@@ -49,19 +49,17 @@ Please follow the [installation procedure](#installation--usage) and you're set 
 Along with your imports, add:
 
 ```python
-...
 from trakerr import Trakerr
-...
 ```
 
-And then you can get a python logger object that ties in to trakerr to handle the various levels of errors.
+And then you can get a python logger object that ties in to trakerr to handle the various levels of errors, giving the appropriate data as strings. 
 
 ```python
 def main(argv=None):#Test Main
     if argv is None:
         argv = sys.argv
 
-    logger = Trakerr.getLogger("API Key", "App version", "Name for the current logger")
+    logger = Trakerr.getLogger("API Key here", "App version here", "Name for the current logger")
 
     try:
         raise ArithmeticError()
