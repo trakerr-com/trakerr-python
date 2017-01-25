@@ -98,7 +98,7 @@ from trakerr__client import Trakerr
 Once you've imported trakerr, you can simply instantiate the class and call log, or pass more info into the function.
 
 ```python
-.def main(argv=None):#Test Main
+def main(argv=None):#Test Main
     if argv is None:
         argv = sys.argv
         
