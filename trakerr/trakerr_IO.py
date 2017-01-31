@@ -18,7 +18,6 @@
     limitations under the License.
 """
 
-from __future__ import absolute_import
 from __builtin__ import *  #My interpreter was shirking adding this automatically on the non-generated files. Most shouldn't need this, figure out why on a second pass
 
 import sys

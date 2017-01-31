@@ -6,7 +6,7 @@ import traceback
 
 
 #Normal automatic instantiation
-import trakerr
+from trakerr import Trakerr
 #from trakerr import Trakerr
 
 """
