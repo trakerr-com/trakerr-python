@@ -65,14 +65,14 @@ class TrakerrIO(object):
         self.Datacenter = datacenter
         self.Datacenter_Region = datacenter_region
 
+        #consider a configuration file for later. Removed my personal data for pushes for now.
+        self.client = TrakerrClient(self.Api_Key, self.URL, self.App_Version, platform.python_implementation(), platform.python_version(),
+                              platform.node(), platform.system() + " " + platform.release(), platform.version(), self.Datacenter, self.Datacenter_Region)
+
     def log(self, classification = "ERROR", error_type = None, error_message = None, exc_info = None):
         """
         
         """
-
-        #consider a configuration file for later. Removed my personal data for pushes for now.
-        client = TrakerrClient(self.Api_Key, self.URL, self.App_Version, platform.python_implementation(), platform.python_version(),
-                              platform.node(), platform.system() + " " + platform.release(), platform.version(), self.Datacenter, self.Datacenter_Region)
       
         try:
             if exc_info is None: exc_info = sys.exc_info()
@@ -85,11 +85,11 @@ class TrakerrIO(object):
             if not isinstance(classification, string_types) or not isinstance(error_type, string_types) or not isinstance(error_message, string_types):
                 raise  TypeError("Arguments are expected strings.") #Do the type check before you creat a new event, hence why we can't merge the two if not false statements
 
-            excevent = client.create_new_app_event(classification, error_type, error_message)
+            excevent = self.client.create_new_app_event(classification, error_type, error_message)
 
             if exc_info is not False:
                 excevent.event_stacktrace = EventTraceBuilder.get_event_traces(exc_info)
-            client.send_event_async(excevent)
+            self.client.send_event_async(excevent)
 
         finally:
             del exc_info
@@ -195,7 +195,6 @@ class TrakerrClient(object):
         Returns the fully filled out AppEvent object, while also filling out the instance passed in
 
         :param app_event:  The app event to fill parameters out.
-        :return: The given AppEvent object after it is checked and filled out.
         """
 
         if not isinstance(app_event, AppEvent):
@@ -217,4 +216,3 @@ class TrakerrClient(object):
 
         TD = datetime.utcnow() - self.EPOCH_CONSTANT #timedelta object
         if app_event.event_time is None: app_event.event_time = int(TD.total_seconds()*1000)
-        return app_event #Since we're filling out an an instance, probably don't need this.

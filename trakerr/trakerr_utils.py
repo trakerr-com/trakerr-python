@@ -5,7 +5,7 @@ import traceback
 
 class TrakerrUtils(object):
 
-    SERVER_URL = "http://ec2-52-91-176-104.compute-1.amazonaws.com/api/v1"
+    SERVER_URL = "https://www.trakerr.io/api/v1"
 
     @classmethod
     def format_error_name(self, error_type):

@@ -1,5 +1,5 @@
 ﻿import logging
-from trakerr_IO import TrakerrIO
+from trakerr_IO import TrakerrIO, TrakerrClient
 from trakerr_utils import TrakerrUtils
 
 class TrakerrHandler(logging.Handler):

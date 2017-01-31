@@ -7,56 +7,43 @@ import traceback
 
 #Normal automatic instantiation
 from trakerr import Trakerr
-#from trakerr import Trakerr
+
 
 """
 #With handler, manual init
 import logging
-from trakerr_handler import TrakerrHandler
+from trakerr import TrakerrHandler
 """
-
-"""
-#Without handler
-from trakerr__client import Trakerr
-"""
-
 
 
 def main(argv=None):
     if argv is None:
         argv = sys.argv
-
-    logger = Trakerr.getLogger("ca6b942a89e04069ec96fa2b3438efb310995233724595", "1.0", "Test")
+    
+    logger = Trakerr.getLogger("API KEY", "App Version number here", "Name")
 
     try:
-        raise ArithmeticError()
+        raise FloatingPointError()
     except:
        logger.exception("Bad math.")
 
+    return 0
+    
     """
     #Manual instantiation of the logger.
     logger = logging.getLogger("Logger name")
-    th = TrakerrHandler("API Key here", "App Version Number")
+    th = TrakerrHandler("API KEY", "App Version number here")
     logger.addHandler(th)
 
     try:
         raise ArithmeticError()
     except:
        logger.exception("Bad math.")
-    """
 
+    return 0
     """
-    #Without handler.
-    l = TrakerrSend("API Key here", "App Version Number")
-    try:
-        raise EnvironmentError("Test Bug.")
-    except:
-        l.log()
-        
-    """
-        
 
 
 if __name__ == "__main__":
-    main()
-#    sys.exit(main())
+    #main()
+    sys.exit(main())
