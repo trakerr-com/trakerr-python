@@ -38,14 +38,14 @@ from trakerr_utils import TrakerrUtils
 from datetime import datetime, timedelta
 
 
-class TrakerrSend(object):
+class TrakerrIO(object):
     """
     The public facing class that will log errors.
 
     A standard use case without the handler is:
     >>>from trakerr__client import trakerr
     >>>...
-    >>>l = trakerr("API Key", "URL", "app_version", "env_name")
+    >>>l = trakerr("API Key", "app_version")
     >>>...
     >>>try:
     >>>   ...

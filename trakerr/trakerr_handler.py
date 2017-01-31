@@ -1,5 +1,5 @@
 ﻿import logging
-from trakerr__client import TrakerrSend
+from trakerr_IO import TrakerrIO
 from trakerr_utils import TrakerrUtils
 
 class TrakerrHandler(logging.Handler):
@@ -11,10 +11,10 @@ class TrakerrHandler(logging.Handler):
         """
         logging.Handler.__init__(self, level = level)
 
-        if isinstance(client, TrakerrSend):
+        if isinstance(client, TrakerrIO):
             self.trakerr_client = client
         else:
-            self.trakerr_client = TrakerrSend(api_key, app_version, url, datacenter, datacenter_region)
+            self.trakerr_client = TrakerrIO(api_key, app_version, url, datacenter, datacenter_region)
 
     def emit(self, record):
         """

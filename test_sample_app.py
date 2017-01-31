@@ -6,7 +6,8 @@ import traceback
 
 
 #Normal automatic instantiation
-from trakerr import Trakerr
+import trakerr
+#from trakerr import Trakerr
 
 """
 #With handler, manual init
@@ -25,7 +26,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
 
-    logger = Trakerr.getLogger("API Key here", "App version here", "Name for the current logger")
+    logger = Trakerr.getLogger("ca6b942a89e04069ec96fa2b3438efb310995233724595", "1.0", "Test")
 
     try:
         raise ArithmeticError()
