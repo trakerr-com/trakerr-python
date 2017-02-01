@@ -36,65 +36,6 @@ from event_trace_builder import EventTraceBuilder
 from trakerr_utils import TrakerrUtils
 from datetime import datetime, timedelta
 
-
-class TrakerrIO(object):
-    """
-    The public facing class that will log errors.
-
-    A standard use case without the handler is:
-    >>>from trakerr__client import trakerr
-    >>>...
-    >>>l = trakerr("API Key", "app_version")
-    >>>...
-    >>>try:
-    >>>   ...
-    >>>except:
-    >>>   l.log()
-    """
-
-    def __init__(self, api_key, app_version, url = TrakerrUtils.SERVER_URL, datacenter = None, datacenter_region = None):
-        """
-        """
-        if (not isinstance(api_key, string_types) or not isinstance(url, string_types) or not isinstance(app_version, string_types)
-                or (datacenter is not None and not isinstance(datacenter, string_types)) or (datacenter_region is not None and not isinstance(datacenter_region, string_types))):
-            raise TypeError("Arguments are expected strings.")
-
-        self.Api_Key = api_key
-        self.URL = url
-        self.App_Version = app_version
-        self.Datacenter = datacenter
-        self.Datacenter_Region = datacenter_region
-
-        #consider a configuration file for later. Removed my personal data for pushes for now.
-        self.client = TrakerrClient(self.Api_Key, self.URL, self.App_Version, platform.python_implementation(), platform.python_version(),
-                              platform.node(), platform.system() + " " + platform.release(), platform.version(), self.Datacenter, self.Datacenter_Region)
-
-    def log(self, classification = "ERROR", error_type = None, error_message = None, exc_info = None):
-        """
-        
-        """
-      
-        try:
-            if exc_info is None: exc_info = sys.exc_info()
-            if exc_info is not False:
-                #//TODO: Add check for exc_info here.
-                type, value = exc_info[:2]
-                if error_type is None: error_type = TrakerrUtils.format_error_name(type)
-                if error_message is None: error_message = str(value)
-
-            if not isinstance(classification, string_types) or not isinstance(error_type, string_types) or not isinstance(error_message, string_types):
-                raise  TypeError("Arguments are expected strings.") #Do the type check before you creat a new event, hence why we can't merge the two if not false statements
-
-            excevent = self.client.create_new_app_event(classification, error_type, error_message)
-
-            if exc_info is not False:
-                excevent.event_stacktrace = EventTraceBuilder.get_event_traces(exc_info)
-            self.client.send_event_async(excevent)
-
-        finally:
-            del exc_info
-
-
 class TrakerrClient(object):
     """
     Description of class
@@ -115,21 +56,19 @@ class TrakerrClient(object):
 
     EPOCH_CONSTANT = datetime(1970, 1, 1)
 
-    def __init__(self, api_key=None, url_path=None, context_app_version=None, context_env_name="development", context_env_version=None,
-                 context_env_hostname=None,
-                 context_appos=None, context_appos_version=None, context_datacenter=None,
-                 context_datacenter_region=None):
+    def __init__(self, api_key, context_app_version, url_path = TrakerrUtils.SERVER_URL,  context_datacenter = None, context_datacenter_region = None,
+                 context_env_name = platform.python_implementation(), context_env_version = platform.python_version(), context_env_hostname = platform.node(),
+                 context_appos = platform.system() + " " + platform.release(), context_appos_version = platform.version()):
         """
 
         :param context_env_name: The string name of the enviroment the code is running on.
         :param context_env_version: The string version of the enviroment the code is running on.
         """
 
-        test8 = (context_datacenter_region is not None and isinstance(context_datacenter_region, string_types))
-        if ((api_key is not None and not isinstance(api_key, string_types)) or (url_path is not None and not isinstance(url_path, string_types))
-                or (context_app_version is not None and not isinstance(context_app_version, string_types)) or not isinstance(context_env_name, string_types)
-                or (context_env_hostname is not None and not isinstance(context_env_hostname, string_types)) or (context_appos is not None and not isinstance(context_appos, string_types))
-                or (context_appos_version is not None and not isinstance(context_appos_version, string_types)) 
+        if (not isinstance(api_key, string_types) or not isinstance(url_path, string_types)
+                or not isinstance(context_app_version, string_types) or not isinstance(context_env_name, string_types)
+                or not isinstance(context_env_hostname, string_types) or not isinstance(context_appos, string_types)
+                or not isinstance(context_appos_version, string_types)
                 or (context_datacenter is not None and not isinstance(context_datacenter, string_types))
                 or (context_datacenter_region is not None and not isinstance(context_datacenter_region, string_types))):
             raise TypeError("Arguments are expected strings")
@@ -144,20 +83,38 @@ class TrakerrClient(object):
         self.context_AppOS_Version = context_appos_version
         self.context_DataCenter = context_datacenter
         self.context_DataCenter_Region = context_datacenter_region
-        if url_path is None:
-            client = ApiClient()
-        else:
-            client = ApiClient(url_path)
-        self.events_api = EventsApi(client)
 
-    def create_new_app_event(self, classification="ERROR", event_type="unknown",
-                             event_message="unknown"):  # Default None the arguments if they're not required?
+        self.events_api = EventsApi(ApiClient(url_path))
+
+    def create_new_app_event(self, classification = "ERROR", event_type = "unknown", event_message = "unknown"):  # Default None the arguments if they're not required?
         """
         """
         if not isinstance(classification, string_types) or not isinstance(event_type, string_types) or not isinstance(event_message, string_types):
             raise TypeError("Arguments are expected strings.")
 
         return AppEvent(self.api_Key, classification, event_type, event_message)
+
+    def create_new_app_event_error(self, classification = "ERROR", event_type = "unknown", event_message = "unknown", exc_info = None):
+        """
+        """
+        try:
+            if exc_info is None: exc_info = sys.exc_info()
+            if exc_info is not False:
+            #//TODO: Add check for exc_info here.
+                type, value = exc_info[:2]
+            if event_type is None: event_type = TrakerrUtils.format_error_name(type)#Error if exec_into is None/False and error type is none?
+            if event_message is None: event_message = str(value)
+
+            if not isinstance(classification, string_types) or not isinstance(event_type, string_types) or not isinstance(event_message, string_types):
+                raise  TypeError("Arguments are expected strings.") #Do the type check before you creat a new event, hence why we can't merge the two if not false statements.
+
+            excevent = self.create_new_app_event(classification, event_type, event_message)
+            excevent.event_stacktrace = EventTraceBuilder.get_event_traces(exc_info)
+
+        finally:
+            del exc_info
+
+        return excevent
 
     def send_event(self, app_event):
         """
@@ -187,7 +144,12 @@ class TrakerrClient(object):
         self.fill_defaults(app_event)
         self.events_api.events_post(app_event, callback=self.async_callback)
 
+    def log(self, classification = "ERROR", error_type = None, error_message = None, exc_info = None):
+        """
+        """
 
+        excevent = self.create_new_app_event_error(classification, error_type, error_message, exc_info)
+        self.send_event_async(excevent)
 
     def fill_defaults(self, app_event):
         """
