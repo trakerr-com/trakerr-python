@@ -17,7 +17,7 @@ pip install git+https://github.com/trakerr-io/trakerr-python.git
 
 Then import the package:
 ```python
-import trakerr_client
+import trakerr
 ```
 
 ## Getting Started
