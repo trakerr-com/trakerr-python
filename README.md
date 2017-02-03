@@ -78,7 +78,7 @@ from trakerr import TrakerrClient
 from trakerr_client.models import CustomData, CustomStringData
 ```
 
-You'll then need to initialize custom properties once you create the event. Note that you can use the second call commented out to instead creat an app event without a stacktrace.
+You'll then need to initialize custom properties once you create the event. Note that you can use the second call commented out to instead create an app event without a stacktrace.
 
 ```Python
 def main(argv=None):
