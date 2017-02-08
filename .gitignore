@@ -1,3 +1,4 @@
+.DS_*
 *.pyc
 .idea
 Trackerr.pyproj
