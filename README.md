@@ -38,7 +38,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     
-    logger = Trakerr.getLogger("API KEY", "App Version number here", "Name")
+    logger = Trakerr.getLogger("API KEY", "App Version number here", "Logger Name")
 
     try:
         raise FloatingPointError()
@@ -72,7 +72,7 @@ def main(argv=None):
 ```
 
 ### Option 3: Add Custom Data
-You can send custom data as part of your error event if you need to. Add these imports:
+You can send custom data as part of your error event if you need to. This circumvents the python handler. Add these imports:
 ```python
 from trakerr import TrakerrClient
 from trakerr_client.models import CustomData, CustomStringData
