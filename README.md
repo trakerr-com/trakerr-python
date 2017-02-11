@@ -139,11 +139,12 @@ def __init__(self, api_key,  app_version, context_env_name = None,
 ```python
 def __init__(self, api_key, context_app_version, context_env_name = platform.python_implementation(), 
              context_env_version = platform.python_version(), context_env_hostname = platform.node(),
-             context_appos = platform.system() + " " + platform.release(), context_appos_version = platform.version(),
+             context_appos = platform.system() + " " + platform.release(), 
+             context_appos_version = platform.version(),
              context_datacenter = None, context_datacenter_region = None, url_path = TrakerrUtils.SERVER_URL,):
 ```
 
-Finally we have the `TrakerrClient` init above. All of the data in this constructor will be sent to the server as string data (other than the `url_path` which has the url for the rest page). Refer to the reference table below for detals/
+Finally we have the `TrakerrClient` init above. All of the data in this constructor will be sent to the server as string data (other than the `url_path` which has the url for the rest page). Refer to the reference table below for details.
 
 
 Name | Type | Description | Notes
