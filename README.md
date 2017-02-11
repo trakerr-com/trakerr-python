@@ -52,12 +52,14 @@ def main(argv=None):
 You can initialize the handler directly and attach it to your own logger, if you want direct control over it. This is useful if you want your own custom logger. An example with the base logger follows.
 
 You'll need to add these imports:
+
 ```python
 import logging
 from trakerr import TrakerrHandler
 ```
 
 And then you'll need to create a handler and a logger object and attach them before you can use them later on.
+
 ```python
 def main(argv=None):
     logger = logging.getLogger("Logger name")
@@ -74,6 +76,7 @@ def main(argv=None):
 
 ### Option 3: Add Custom Data
 You can send custom data as part of your error event if you need to. This circumvents the python handler. Add these imports:
+
 ```python
 from trakerr import TrakerrClient
 from trakerr_client.models import CustomData, CustomStringData
@@ -116,6 +119,7 @@ Most of the examples above involve are initialized simply, since the error is po
                context_appos_version = platform.version(), datacenter = None, datacenter_region = None,
                client = None, url = TrakerrUtils.SERVER_URL,  level = logging.ERROR):
 ```
+
 Most of the call will be explained later since most of the arguments are passed down, but the `name` field is unique to `getLogger`. Name is simply the name `TrakerrHandler` object it stores internally for identification. It is required and should be unique, but Trakerr itself does not suggest a convention on naming `Handler` objects.
 
 The constructor for `TrakerrHandler` takes the rest of the arguments itself. The handler object acts as an intermediary between the error and Trakerr's send layers; providing the error data from the handler on emit with external facing tools. Constructor wise, it will in turn pass most it's argument to the `TrakerrClient` class, to populate the send event with the data we passed the handler to hold onto. We exposed the arguments early so as to not have to dig through the initalized `TrakerrClient` later to change them. Here's TrakerrHandler's init function.
