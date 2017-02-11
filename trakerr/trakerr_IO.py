@@ -56,9 +56,10 @@ class TrakerrClient(object):
 
     EPOCH_CONSTANT = datetime(1970, 1, 1)
 
-    def __init__(self, api_key, context_app_version, url_path = TrakerrUtils.SERVER_URL,  context_datacenter = None, context_datacenter_region = None,
-                 context_env_name = platform.python_implementation(), context_env_version = platform.python_version(), context_env_hostname = platform.node(),
-                 context_appos = platform.system() + " " + platform.release(), context_appos_version = platform.version()):
+    def __init__(self, api_key, context_app_version = None, context_env_name = "development", 
+                 context_env_version = platform.python_implementation()+ " " + platform.python_version(), context_env_hostname = platform.node(),
+                 context_appos = platform.system() + " " + platform.release(), context_appos_version = platform.version(),
+                 context_datacenter = None, context_datacenter_region = None, url_path = TrakerrUtils.SERVER_URL,):
         """
 
         :param context_env_name: The string name of the enviroment the code is running on.
@@ -66,11 +67,13 @@ class TrakerrClient(object):
         """
 
         if (not isinstance(api_key, string_types) or not isinstance(url_path, string_types)
-                or not isinstance(context_app_version, string_types) or not isinstance(context_env_name, string_types)
-                or not isinstance(context_env_hostname, string_types) or not isinstance(context_appos, string_types)
-                or not isinstance(context_appos_version, string_types)
-                or (context_datacenter is not None and not isinstance(context_datacenter, string_types))
-                or (context_datacenter_region is not None and not isinstance(context_datacenter_region, string_types))):
+                or (not isinstance(context_app_version, string_types) and context_app_version is not None)
+                or (not isinstance(context_env_name, string_types) and context_env_name is not None)
+                or (not isinstance(context_env_hostname, string_types) and context_env_hostname is not None)
+                or (not isinstance(context_appos, string_types) and context_appos is not None)
+                or (not isinstance(context_appos_version, string_types) and context_appos is not None)
+                or (not isinstance(context_datacenter, string_types) and context_datacenter is not None )
+                or (not isinstance(context_datacenter_region, string_types) and context_datacenter_region is not None)):
             raise TypeError("Arguments are expected strings")
 
         self.api_Key = api_key
