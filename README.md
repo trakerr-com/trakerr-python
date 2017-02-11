@@ -163,7 +163,7 @@ Name | Type | Description | Notes
 **url_path** | **str** | message containing details of the event or error | 
 
 
-The server accepts the final two arguments before url_path, but they are currently in development from on an api level, so if you are using django or another web framework; please use the REST API currently. They are not currently available in the `TrakerrClient` constructor.
+The server accepts the final two arguments before url_path, but they are currently in development on this api level, so if you are using django or another web framework; please use the REST API. They are not currently available in the `TrakerrClient` constructor.
 
 
 ## Documentation For Models
