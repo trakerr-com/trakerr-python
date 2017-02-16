@@ -89,7 +89,7 @@ class TrakerrClient(object):
 
         self.events_api = EventsApi(ApiClient(url_path))
 
-    def create_new_app_event(self, classification = "ERROR", event_type = "unknown", event_message = "unknown"):  # Default None the arguments if they're not required?
+    def create_new_app_event(self, classification = "ERROR", event_type = None, event_message = None):  # Default None the arguments if they're not required?
         """
         """
         if not isinstance(classification, string_types) or not isinstance(event_type, string_types) or not isinstance(event_message, string_types):
@@ -97,7 +97,7 @@ class TrakerrClient(object):
 
         return AppEvent(self.api_Key, classification, event_type, event_message)
 
-    def create_new_app_event_error(self, classification = "ERROR", event_type = "unknown", event_message = "unknown", exc_info = None):
+    def create_new_app_event_error(self, classification = "ERROR", event_type = None, event_message = None, exc_info = None):
         """
         """
         try:
