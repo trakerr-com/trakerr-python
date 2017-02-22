@@ -23,18 +23,19 @@ from trakerr_client.models import CustomData, CustomStringData
 
 
 def main(argv=None):
+    """
+    Main method.
+    """
     if argv is None:
         argv = sys.argv
     
     logger = Trakerr.getLogger("API KEY", "App Version number here", "Name")
 
     try:
-        raise FloatingPointError()
+        error()
     except:
-       logger.exception("Bad math.")
+        logger.exception("Bad math.")
 
-    return 0
-    
 
     """
     #Manual instantiation of the logger.
@@ -47,7 +48,6 @@ def main(argv=None):
     except:
        logger.exception("Bad math.")
 
-    return 0
     """
 
     """
@@ -68,9 +68,11 @@ def main(argv=None):
 
         #send it to trakerr
         client.send_event_async(appevent)
-
-    return 0
     """
+    return 0
+
+def error():
+    raise EOFError()
 
 if __name__ == "__main__":
     #main()

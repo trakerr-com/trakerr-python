@@ -16,17 +16,11 @@
     limitations under the License.
 """
 
-
-from __builtin__ import * #My interpreter was shirking adding this automatically on the non-generated files. Most shouldn't need this, figure out why on a second pass
-
 import sys
-import os
-import re
 import traceback
 
 from trakerr_client.models import *
 from trakerr_utils  import TrakerrUtils
-from six import iteritems
 
 
 class EventTraceBuilder(object):
@@ -37,7 +31,7 @@ class EventTraceBuilder(object):
     """
 
     @classmethod
-    def get_event_traces(self, exc_info = None):
+    def get_event_traces(self, exc_info=None):
         """
         """
 
@@ -77,12 +71,12 @@ class EventTraceBuilder(object):
         """
 
         stacklines = StackTraceLines()
-        st_line = StackTraceLine()
 
-        for filename, line, func, text in traceback.extract_tb(tb):
+        for filename, line, func, _ in traceback.extract_tb(tb):
+            st_line = StackTraceLine()
             st_line.file = filename
             st_line.line = line
             st_line.function = func
+            stacklines.append(st_line)
 
-        stacklines.append(st_line)
         return stacklines
