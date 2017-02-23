@@ -4,10 +4,10 @@ import os
 import re
 import traceback
 
-
+"""
 #Normal automatic instantiation
 from trakerr import Trakerr
-
+"""
 
 """
 #With handler, manual init
@@ -15,26 +15,27 @@ import logging
 from trakerr import TrakerrHandler
 """
 
-"""
+
 #Without handler custom peramiters
 from trakerr import TrakerrClient
 from trakerr_client.models import CustomData, CustomStringData
-"""
+
 
 
 def main(argv=None):
     """
     Main method.
     """
+    """
     if argv is None:
         argv = sys.argv
-    
-    logger = Trakerr.getLogger("API KEY", "App Version number here", "Name")
 
+    logger = Trakerr.getLogger("ca6b942a89e04069ec96fa2b3438efb310995233724595", "1.0", "newlogger")
     try:
         error()
     except:
         logger.exception("Bad math.")
+    """
 
 
     """
@@ -50,7 +51,6 @@ def main(argv=None):
 
     """
 
-    """
     client = TrakerrClient("API KEY", "App Version number here")
 
     try:
@@ -65,10 +65,12 @@ def main(argv=None):
         appevent.custom_properties = CustomData("Custom Data holder!")
         appevent.custom_properties.string_data = CustomStringData("Custom String Data 1", "Custom String Data 2") #Can support multiple data
         appevent.custom_properties.string_data.custom_data3 = "More Custom Data!"
+        appevent.event_user = "john@traker.io"
+        appevent.event_session = "6"
 
         #send it to trakerr
         client.send_event_async(appevent)
-    """
+    
     return 0
 
 def error():
