@@ -181,5 +181,3 @@ The server accepts the final two arguments before url_path, but they are current
 
 ## Author
 [RM](https://github.com/RMSD)
-
-
