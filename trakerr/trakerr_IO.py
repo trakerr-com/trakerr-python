@@ -54,10 +54,13 @@ class TrakerrClient(object):
 
     EPOCH_CONSTANT = datetime(1970, 1, 1)
 
-    def __init__(self, api_key, context_app_version = None, context_env_name = "development", 
-                 context_env_version = platform.python_implementation()+ " " + platform.python_version(), context_env_hostname = platform.node(),
-                 context_appos = platform.system() + " " + platform.release(), context_appos_version = platform.version(),
-                 context_datacenter = None, context_datacenter_region = None, url_path = TrakerrUtils.SERVER_URL,):
+    def __init__(self, api_key, context_app_version=None, context_env_name="development",
+                 context_env_version=platform.python_implementation()+" "+
+                 platform.python_version(),
+                 context_env_hostname=platform.node(),
+                 context_appos=platform.system()+" "+platform.release(),
+                 context_appos_version=platform.version(),
+                 context_datacenter=None, context_datacenter_region=None, url_path=TrakerrUtils.SERVER_URL,):
         """
 
         :param context_env_name: The string name of the enviroment the code is running on.
