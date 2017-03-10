@@ -22,7 +22,7 @@ import traceback
 from six import *
 
 from trakerr_client.models import *
-from trakerr_utils import TrakerrUtils
+from trakerr_utils  import TrakerrUtils
 
 
 class EventTraceBuilder(object):
@@ -33,7 +33,7 @@ class EventTraceBuilder(object):
     """
 
     @classmethod
-    def get_event_traces(cls, exc_info=None):
+    def get_event_traces(self, exc_info=None):
         """
         """
 
@@ -42,40 +42,39 @@ class EventTraceBuilder(object):
             if exc_info is None: exc_info = sys.exc_info()
 
             #TODO: Add check for exc_info
-            cls.add_stack_trace(trace, exc_info)
+            self.add_stack_trace(trace, exc_info)
             return trace
         finally:
             del exc_info
 
     @classmethod
-    def add_stack_trace(cls, trace_list, exc_info=None):
+    def add_stack_trace(self, trace_list, exc_info=None):
         """
         """
 
         try:
-            if exc_info is None:
-                exc_info = sys.exc_info()
+            if exc_info is None: exc_info = sys.exc_info()
 
             if not isinstance(trace_list, Stacktrace):#TODO: Add check for exc_info
                 raise TypeError("An argument is not the correct type.")
-            newtrace = InnerStackTrace()
+            newTrace = InnerStackTrace()
 
-            e_type, value, tb_ = exc_info
-            newtrace.trace_lines = cls.get_event_tracelines(tb_)
-            newtrace.type = TrakerrUtils.format_error_name(e_type)
-            newtrace.message = str(value)
-            trace_list.append(newtrace)
+            e_type, value, tb = exc_info
+            newTrace.trace_lines = self.get_event_tracelines(tb)
+            newTrace.type = TrakerrUtils.format_error_name(e_type)
+            newTrace.message = str(value)
+            trace_list.append(newTrace)
         finally:
             del exc_info
 
     @classmethod
-    def get_event_tracelines(cls, tb_):
+    def get_event_tracelines(self, tb):
         """
         """
 
         stacklines = StackTraceLines()
 
-        for filename, line, func, _ in traceback.extract_tb(tb_):
+        for filename, line, func, _ in traceback.extract_tb(tb):
             st_line = StackTraceLine()
             st_line.file = filename
             st_line.line = line
