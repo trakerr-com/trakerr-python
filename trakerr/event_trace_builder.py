@@ -35,41 +35,60 @@ class EventTraceBuilder(object):
     @classmethod
     def get_event_traces(self, exc_info=None):
         """
+        Returns a new Stacktrace object instance,
+        after parsing the given exc_info tuple or generating a new one.
+        :param exc_info: Tuple to parse the Stacktrace from.
+         Pass None to generate a new one from the current error frame.
+        :return: A Stacktrace instance (list of InnerStackTraces.)
         """
 
         trace = Stacktrace()
         try:
-            if exc_info is None: exc_info = sys.exc_info()
+            if exc_info is None:
+                exc_info = sys.exc_info()
 
-            #TODO: Add check for exc_info
-            self.add_stack_trace(trace, exc_info)
+            if not TrakerrUtils.is_exc_info_tuple(exc_info):
+                raise TypeError("exc_info is expected an exc_info info tuple or None.")
+
+
+            cls._add_stack_trace(trace, exc_info)
             return trace
         finally:
             del exc_info
 
     @classmethod
-    def add_stack_trace(self, trace_list, exc_info=None):
+
+    def _add_stack_trace(cls, trace_list, exc_info):
         """
+        Adds a new trace to the current list of inner stacktraces.
+        :param trace_list: List of InnerStackTrace (Stacktrace instance)
+        :param exc_info: exc_info tuple to extract data from and parse.
         """
 
         try:
-            if exc_info is None: exc_info = sys.exc_info()
 
-            if not isinstance(trace_list, Stacktrace):#TODO: Add check for exc_info
+            if not TrakerrUtils.is_exc_info_tuple(exc_info):
+                raise TypeError("exc_info is expected an exc_info info tuple.")
+
+            if not isinstance(trace_list, Stacktrace):
                 raise TypeError("An argument is not the correct type.")
             newTrace = InnerStackTrace()
 
-            e_type, value, tb = exc_info
-            newTrace.trace_lines = self.get_event_tracelines(tb)
-            newTrace.type = TrakerrUtils.format_error_name(e_type)
-            newTrace.message = str(value)
-            trace_list.append(newTrace)
+
+            e_type, value, tb_ = exc_info
+            newtrace.trace_lines = cls._get_event_tracelines(tb_)
+            newtrace.type = TrakerrUtils.format_error_name(e_type)
+            newtrace.message = str(value)
+            trace_list.append(newtrace)
         finally:
             del exc_info
 
     @classmethod
-    def get_event_tracelines(self, tb):
+    def _get_event_tracelines(cls, tb_):
         """
+        Parses each line and returns a StackTraceLines object.
+        :param tb_: traceback object to parse
+        :return: StackTraceLines instance which is a list of StackTraceLine with data filled.
         """
 
         stacklines = StackTraceLines()
