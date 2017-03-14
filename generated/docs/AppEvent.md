@@ -4,15 +4,18 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **api_key** | **str** | API key generated for the application | 
-**classification** | **str** | one of &#39;debug&#39;,&#39;info&#39;,&#39;warning&#39;,&#39;error&#39; or a custom string | 
-**event_type** | **str** | type or event or error (eg. NullPointerException) | 
+**log_level** | **str** | (optional) Logging level, one of &#39;debug&#39;,&#39;info&#39;,&#39;warning&#39;,&#39;error&#39;, &#39;fatal&#39;, defaults to &#39;error&#39; | [optional] 
+**classification** | **str** | (optional) one of &#39;error&#39; or a custom string for non-errors, defaults to &#39;error&#39; | 
+**event_type** | **str** | type of the event or error (eg. NullPointerException) | 
 **event_message** | **str** | message containing details of the event or error | 
 **event_time** | **int** | (optional) event time in ms since epoch | [optional] 
 **event_stacktrace** | [**Stacktrace**](Stacktrace.md) |  | [optional] 
 **event_user** | **str** | (optional) event user identifying a user | [optional] 
 **event_session** | **str** | (optional) session identification | [optional] 
 **context_app_version** | **str** | (optional) application version information | [optional] 
-**context_env_name** | **str** | (optional) one of &#39;development&#39;,&#39;staging&#39;,&#39;production&#39; or a custom string | [optional] 
+**deployment_stage** | **str** | (optional) deployment stage, one of &#39;development&#39;,&#39;staging&#39;,&#39;production&#39; or a custom string | [optional] 
+**context_env_name** | **str** | (optional) environment name (like &#39;cpython&#39; or &#39;ironpython&#39; etc.) | [optional] 
+**context_env_language** | **str** | (optional) language (like &#39;python&#39; or &#39;c#&#39; etc.) | [optional] 
 **context_env_version** | **str** | (optional) version of environment | [optional] 
 **context_env_hostname** | **str** | (optional) hostname or ID of environment | [optional] 
 **context_app_browser** | **str** | (optional) browser name if running in a browser (eg. Chrome) | [optional] 
