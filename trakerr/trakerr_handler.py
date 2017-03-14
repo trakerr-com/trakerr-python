@@ -27,10 +27,7 @@ class TrakerrHandler(logging.Handler):
     """
 
     def __init__(self, api_key, app_version, context_env_name=None,
-                 context_env_version=None, context_env_hostname=None,
-                 context_appos=None, context_appos_version=None,
-                 datacenter=None, datacenter_region=None,
-                 client=None, url=TrakerrUtils.SERVER_URL, level=logging.ERROR):
+                 client=None, level=logging.ERROR):
         """
         Initializes the handler.
         """
@@ -39,15 +36,13 @@ class TrakerrHandler(logging.Handler):
         if isinstance(client, TrakerrClient):
             self.trakerr_client = client
         else:
-            self.trakerr_client = TrakerrClient(api_key, app_version, context_env_name,
-                                                context_env_version, context_env_hostname,
-                                                context_appos, context_appos_version,
-                                                datacenter, datacenter_region, url)
+            self.trakerr_client = TrakerrClient(
+                api_key, app_version, context_env_name)
 
     def emit(self, record):
         """
         Logs the record with Trakerr.
         :param record: The record compiled by the exception handler
         """
-        self.trakerr_client.log(
-            record.levelname, error_message=record.getMessage(), exc_info=record.exc_info)
+        self.trakerr_client.log({'errmessage': record.getMessage()},
+                                record.levelname, record.exc_info)
