@@ -19,14 +19,13 @@ import logging
 
 from trakerr_handler import TrakerrHandler
 
-
 class Trakerr(object):
     """
     An external facing class that provides static methods for creating a TrakerrHandler.
     """
 
     @classmethod
-    def has_trakerr_handler(cls, logger):
+    def has_trakerr_handler(self, logger):
         """
         checks to see if a logger handler instance
         has already been registered with the global logger.
@@ -36,7 +35,11 @@ class Trakerr(object):
         return any([isinstance(handler, TrakerrHandler) for handler in logger.handlers])
 
     @classmethod
-    def get_logger(cls, api_key, app_version, name, context_env_name="development"):
+    def getLogger(self, api_key,  app_version, name, context_env_name = "development", 
+                 context_env_version = platform.python_implementation()+ " " + platform.python_version(), context_env_hostname = platform.node(),
+                 context_appos = platform.system() + " " + platform.release(), context_appos_version = platform.version(),
+                 datacenter = None, datacenter_region = None,
+                 client = None, url = TrakerrUtils.SERVER_URL,  level = logging.ERROR):
         """
         instantiate a logger instance and add a trakerr extended handler to it.
         :param api_key: String apikey of your trakerr application.
@@ -48,6 +51,7 @@ class Trakerr(object):
         logger = logging.getLogger(str(name))
 
         if not Trakerr.has_trakerr_handler(logger):
-            th_ = TrakerrHandler(api_key, app_version, context_env_name)
-            logger.addHandler(th_)
+            th = TrakerrHandler(api_key, app_version, context_env_name, context_env_version, context_env_hostname,
+                                context_appos, context_appos_version, datacenter, datacenter_region, client, url, level)
+            logger.addHandler(th)
         return logger

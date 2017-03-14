@@ -31,7 +31,6 @@ from trakerr_client.apis import EventsApi
 from trakerr_client.models import *
 from trakerr_utils import TrakerrUtils
 
-
 class TrakerrClient(object):
     """
     An object which controls creating and sending AppEvents.
@@ -53,7 +52,7 @@ class TrakerrClient(object):
     # context_datacenter_region
 
     EPOCH_CONSTANT = datetime(1970, 1, 1)
-
+    
     def __init__(self, api_key, context_app_version=None, context_env_name="development"):
         """
         Initializes the TrakerrClient classe and default values for it's properties.
@@ -97,8 +96,7 @@ class TrakerrClient(object):
         :return: AppEvent instance with exc_info parsed depending on the above flags.
         """
         try:
-            if exc_info is None:
-                exc_info = sys.exc_info()
+            if exc_info is None: exc_info = sys.exc_info()
             if exc_info is not False:
                 if not TrakerrUtils.is_exc_info_tuple(exc_info):
                     raise TypeError("exc_info is expected an exc_info info tuple or False.")
@@ -122,7 +120,6 @@ class TrakerrClient(object):
             if exc_info is not False:
                 excevent.event_stacktrace = EventTraceBuilder.get_event_traces(
                     exc_info)
-
         finally:
             del exc_info
 
@@ -145,7 +142,7 @@ class TrakerrClient(object):
         :param response: message returned after the async call is completed.
         """
 
-        # print response
+        #print response
 
     def send_event_async(self, app_event):
         """
@@ -173,7 +170,6 @@ class TrakerrClient(object):
          Default None to generate a exc_info tuple from the current stacktrace.
          Pass False to not generate an exc_info tuple.
         """
-
         excevent = self.create_new_app_event(
             classification, arg_dict.get('errname'), arg_dict.get('errmessage'), exc_info)
         excevent.event_user = arg_dict.get('user')

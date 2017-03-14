@@ -22,7 +22,7 @@ import traceback
 from six import *
 
 from trakerr_client.models import *
-from trakerr_utils import TrakerrUtils
+from trakerr_utils  import TrakerrUtils
 
 
 class EventTraceBuilder(object):
@@ -33,7 +33,7 @@ class EventTraceBuilder(object):
     """
 
     @classmethod
-    def get_event_traces(cls, exc_info=None):
+    def get_event_traces(self, exc_info=None):
         """
         Returns a new Stacktrace object instance,
         after parsing the given exc_info tuple or generating a new one.
@@ -50,12 +50,14 @@ class EventTraceBuilder(object):
             if not TrakerrUtils.is_exc_info_tuple(exc_info):
                 raise TypeError("exc_info is expected an exc_info info tuple or None.")
 
+
             cls._add_stack_trace(trace, exc_info)
             return trace
         finally:
             del exc_info
 
     @classmethod
+
     def _add_stack_trace(cls, trace_list, exc_info):
         """
         Adds a new trace to the current list of inner stacktraces.
@@ -64,12 +66,14 @@ class EventTraceBuilder(object):
         """
 
         try:
+
             if not TrakerrUtils.is_exc_info_tuple(exc_info):
                 raise TypeError("exc_info is expected an exc_info info tuple.")
 
             if not isinstance(trace_list, Stacktrace):
                 raise TypeError("An argument is not the correct type.")
-            newtrace = InnerStackTrace()
+            newTrace = InnerStackTrace()
+
 
             e_type, value, tb_ = exc_info
             newtrace.trace_lines = cls._get_event_tracelines(tb_)
@@ -89,7 +93,7 @@ class EventTraceBuilder(object):
 
         stacklines = StackTraceLines()
 
-        for filename, line, func, _ in traceback.extract_tb(tb_):
+        for filename, line, func, _ in traceback.extract_tb(tb):
             st_line = StackTraceLine()
             st_line.file = filename
             st_line.line = line
