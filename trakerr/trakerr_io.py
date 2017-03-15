@@ -129,7 +129,7 @@ class TrakerrClient(object):
                 # can't merge the two if not false statements.
                 raise TypeError("Arguments are expected strings.")
 
-            excevent = AppEvent(None, log_level,
+            excevent = AppEvent(self.api_key, log_level,
                                 classification, event_type, event_message)
 
             if exc_info is not False:
