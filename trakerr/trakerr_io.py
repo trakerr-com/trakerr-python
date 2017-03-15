@@ -73,8 +73,7 @@ class TrakerrClient(object):
         # before the public property getters and setters. Hence the
         # preappending self._(privatevariable).
         seq = " "
-        self._api_key = None
-        self.api_key = api_key
+        self._api_key = self.api_key = api_key
         self._context_app_version = self.context_app_version = context_app_version
         self._context_deployment_stage = self.context_deployment_stage = context_deployment_stage
         self._context_env_language = self.context_env_language = "Python"
@@ -85,9 +84,9 @@ class TrakerrClient(object):
         self._context_appos = self.context_appos = seq.join(
             (platform.system(), platform.release()))
         self._context_appos_version = self.context_appos_version = platform.version()
-        self.context_appbrowser = self.context_appbrowser = None  # find default
-        self.context_appbrowser_version = self.context_appbrowser_version = None  # find default
-        self.context_datacenter = self.context_datacenter = None
+        self._context_appbrowser = self.context_appbrowser = None  # find default
+        self._context_appbrowser_version = self.context_appbrowser_version = None  # find default
+        self._context_datacenter = self.context_datacenter = None
         self._context_datacenter_region = self.context_datacenter_region = None
 
         self._events_api = EventsApi(ApiClient(Configuration().host))
@@ -130,7 +129,6 @@ class TrakerrClient(object):
                 # can't merge the two if not false statements.
                 raise TypeError("Arguments are expected strings.")
 
-            print self.api_key
             excevent = AppEvent(None, log_level,
                                 classification, event_type, event_message)
 
@@ -163,7 +161,7 @@ class TrakerrClient(object):
             raise TypeError("Argument is expected of class AppEvent.")
 
         self.fill_defaults(app_event)
-        self._events_api.events_post(app_event, callback=async_callback)
+        self._events_api.events_post_with_http_info(app_event, callback=async_callback)
 
     def log(self, arg_dict, log_level="error", classification=None, exc_info=None):
         """
@@ -410,10 +408,10 @@ class TrakerrClient(object):
         del self._context_env_language
 
 
-def async_callback(self, response):
+def async_callback(response):
     """
     Callback method for the send_event_async function. Currently outputs nothing.
     :param response: message returned after the async call is completed.
     """
 
-    print str(response)
+    pprint(str(response)) 
