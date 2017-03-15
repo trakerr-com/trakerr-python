@@ -46,12 +46,12 @@ def main(argv=None):
 
     """
 
-    client = TrakerrClient("API KEY", "App Version number here")
+    client = TrakerrClient("ca6b942a89e04069ec96fa2b3438efb310995233724595", "1.0", "development")
 
     try:
-        raise IndexError("Bad Math")
+        raise IndexError("Index out of bounds.")
     except:
-        appevent = client.create_new_app_event("ERROR", "Index Error", "Math")
+        appevent = client.create_new_app_event("ERROR", "Index Error")
         #appevent = client.create_new_app_event("ERROR", "Index Error", "Math")
         #  #You can use this call to create an app event without a stacktrace,
         # in case you do don't have a stacktrace or you're not sending a crash.

@@ -25,8 +25,6 @@ class TrakerrUtils(object):
     Collection of utility methods to be used in the API.
     """
 
-    SERVER_URL = "https://www.trakerr.io/api/v1"
-
     @classmethod
     def format_error_name(cls, error_type):
         """

@@ -33,7 +33,7 @@ class EventTraceBuilder(object):
     """
 
     @classmethod
-    def get_event_traces(self, exc_info=None):
+    def get_event_traces(cls, exc_info=None):
         """
         Returns a new Stacktrace object instance,
         after parsing the given exc_info tuple or generating a new one.
@@ -72,14 +72,14 @@ class EventTraceBuilder(object):
 
             if not isinstance(trace_list, Stacktrace):
                 raise TypeError("An argument is not the correct type.")
-            newTrace = InnerStackTrace()
+            new_trace = InnerStackTrace()
 
 
             e_type, value, tb_ = exc_info
-            newtrace.trace_lines = cls._get_event_tracelines(tb_)
-            newtrace.type = TrakerrUtils.format_error_name(e_type)
-            newtrace.message = str(value)
-            trace_list.append(newtrace)
+            new_trace.trace_lines = cls._get_event_tracelines(tb_)
+            new_trace.type = TrakerrUtils.format_error_name(e_type)
+            new_trace.message = str(value)
+            trace_list.append(new_trace)
         finally:
             del exc_info
 
@@ -93,7 +93,7 @@ class EventTraceBuilder(object):
 
         stacklines = StackTraceLines()
 
-        for filename, line, func, _ in traceback.extract_tb(tb):
+        for filename, line, func, _ in traceback.extract_tb(tb_):
             st_line = StackTraceLine()
             st_line.file = filename
             st_line.line = line
