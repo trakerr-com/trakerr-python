@@ -19,16 +19,17 @@
 """
 
 import platform
+import pprint
 import sys
 from datetime import datetime
 
 from six import *
-
-from event_trace_builder import EventTraceBuilder
 # might want to clean up imports?
 from trakerr_client import ApiClient, Configuration
 from trakerr_client.apis import EventsApi
 from trakerr_client.models import *
+
+from event_trace_builder import EventTraceBuilder
 from trakerr_utils import TrakerrUtils
 
 
@@ -414,4 +415,4 @@ def async_callback(response):
     :param response: message returned after the async call is completed.
     """
 
-    pprint(str(response)) 
+    pprint.pprint(str(response))
