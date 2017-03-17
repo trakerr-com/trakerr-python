@@ -128,7 +128,7 @@ class TrakerrClient(object):
                         and event_message is not None)):
                 # Do the type check before you creat a new event, hence why we
                 # can't merge the two if not false statements.
-                raise TypeError("Arguments are expected strings.")
+                raise TypeError("Arguments are expected strings or None.")
 
             excevent = AppEvent(self.api_key, log_level,
                                 classification, event_type, event_message)
@@ -415,4 +415,4 @@ def async_callback(response):
     :param response: message returned after the async call is completed.
     """
 
-    pprint.pprint(str(response))
+    pprint.pprint(str(response), sys.stderr)

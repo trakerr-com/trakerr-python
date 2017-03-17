@@ -1,17 +1,12 @@
 ﻿
 import sys
 
-"""
-#Normal automatic instantiation
+# Normal automatic instantiation
 from trakerr import Trakerr
-"""
 
-"""
-#With handler, manual init
+# With handler, manual init
 import logging
 from trakerr import TrakerrHandler
-"""
-
 
 # Without handler custom peramiters
 from trakerr import TrakerrClient
@@ -22,39 +17,39 @@ def main(argv=None):
     """
     Main method.
     """
-    """
+
     if argv is None:
         argv = sys.argv
 
-    logger = Trakerr.getLogger("ca6b942a89e04069ec96fa2b3438efb310995233724595", "1.0", "newlogger")
+    api_key = "Api key here (or pass it in from the command line first param)"
+    if len(argv) > 1:
+        api_key = argv[1]
+    
+    #Built in python handler
+    logger = Trakerr.get_logger(api_key, "1.0", "newlogger")
     try:
         error()
     except:
-        logger.exception("Bad math.")
-    """
+        logger.exception("Corrupt file.")
 
-    """
-    #Manual instantiation of the logger.
-    logger = logging.getLogger("Logger name")
-    th = TrakerrHandler("API KEY", "App Version number here")
-    logger.addHandler(th)
+
+    # Manual instantiation of the logger.
+    logger2 = logging.getLogger("Logger name")
+    trakerr_handler = TrakerrHandler(api_key, "1.0")
+    logger2.addHandler(trakerr_handler)
 
     try:
-        raise ArithmeticError()
+        raise ArithmeticError("2+2 is 5!")
     except:
-       logger.exception("Bad math.")
+        logger2.exception("Bad math.")
 
-    """
 
-    client = TrakerrClient("ca6b942a89e04069ec96fa2b3438efb310995233724595", "1.0", "development")
+    client = TrakerrClient(api_key, "1.0", "development")
 
     try:
         raise IndexError("Index out of bounds.")
     except:
         appevent = client.create_new_app_event("ERROR", "Index Error")
-        #appevent = client.create_new_app_event("ERROR", "Index Error", "Math")
-        #  #You can use this call to create an app event without a stacktrace,
-        # in case you do don't have a stacktrace or you're not sending a crash.
 
         # Populate any field with your own data, or send your own custom data
         appevent.context_app_os = "Windows 8"
@@ -73,7 +68,10 @@ def main(argv=None):
 
 
 def error():
-    raise EOFError()
+    """
+    Function that reads a file.
+    """
+    raise EOFError("I forgot a newline!")
 
 
 if __name__ == "__main__":
