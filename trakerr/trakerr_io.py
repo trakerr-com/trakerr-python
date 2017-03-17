@@ -93,7 +93,7 @@ class TrakerrClient(object):
         self._events_api = EventsApi(ApiClient(Configuration().host))
         # Should get the default url. Also try Configuration().host
 
-    def create_new_app_event(self, log_level="error", classification=None, event_type=None,
+    def create_new_app_event(self, log_level="error", classification="Issue", event_type=None,
                              event_message=None, exc_info=None):
         """
         Creates a new AppEvent instance.
@@ -164,7 +164,7 @@ class TrakerrClient(object):
         self.fill_defaults(app_event)
         self._events_api.events_post_with_http_info(app_event, callback=async_callback)
 
-    def log(self, arg_dict, log_level="error", classification=None, exc_info=None):
+    def log(self, arg_dict, log_level="error", classification="issue", exc_info=None):
         """
         Creates an AppEvent and sends it with the default values to all fields.
         Allows the caller to pass in user and session as added information to log,
