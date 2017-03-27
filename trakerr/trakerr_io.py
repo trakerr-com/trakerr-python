@@ -55,7 +55,7 @@ class TrakerrClient(object):
 
     EPOCH_CONSTANT = datetime(1970, 1, 1)
 
-    def __init__(self, api_key, context_app_version="1.1", context_deployment_stage="development"):
+    def __init__(self, api_key, context_app_version="1.0", context_deployment_stage="development"):
         """
         Initializes the TrakerrClient classe and default values for it's properties.
         :param context_env_name: The string name of the enviroment the code is running on.
