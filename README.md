@@ -13,7 +13,7 @@ Python 2.7 and 3.4+
 ```sh
 pip install git+https://github.com/trakerr-io/trakerr-python.git
 ```
-(you may need to run `pip` with root permission: `pip install git+https://github.com/trakerr-io/trakerr-python.git`)
+(you may need to run `pip` with root permission: `sudo pip install git+https://github.com/trakerr-io/trakerr-python.git`)
 
 Then import the package:
 ```python
