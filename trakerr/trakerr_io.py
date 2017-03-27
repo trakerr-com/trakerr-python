@@ -55,7 +55,7 @@ class TrakerrClient(object):
 
     EPOCH_CONSTANT = datetime(1970, 1, 1)
 
-    def __init__(self, api_key, context_app_version=None, context_deployment_stage="development"):
+    def __init__(self, api_key, context_app_version="1.1", context_deployment_stage="development"):
         """
         Initializes the TrakerrClient classe and default values for it's properties.
         :param context_env_name: The string name of the enviroment the code is running on.
@@ -70,7 +70,7 @@ class TrakerrClient(object):
                     and context_deployment_stage is not None)):
             raise TypeError("Arguments are expected strings")
 
-        # pep8 linters wants you to int the private variable (which is good practice in python)
+        # pep8 linters wants you to init the private variable (which is good practice in python)
         # before the public property getters and setters. Hence the
         # preappending self._(privatevariable).
         seq = " "
@@ -120,8 +120,9 @@ class TrakerrClient(object):
                 if event_message is None:
                     event_message = str(value)
 
-            if ((not isinstance(classification, string_types)
-                 and classification is not None)
+            if (not isinstance(log_level, string_types)
+                    or (not isinstance(classification, string_types)
+                        and classification is not None)
                     or (not isinstance(event_type, string_types)
                         and event_type is not None)
                     or (not isinstance(event_message, string_types)
@@ -129,6 +130,14 @@ class TrakerrClient(object):
                 # Do the type check before you creat a new event, hence why we
                 # can't merge the two if not false statements.
                 raise TypeError("Arguments are expected strings or None.")
+
+            #Accepted value string parsing.
+            #Leave the appevent incase someone wants to fill it out themselves as an error.
+            #But we just want to default to error here.
+            log_level = log_level.lower()
+            allowed_values = ["debug", "info", "warning", "error", "fatal"]
+            if log_level not in allowed_values:
+                log_level = "error"
 
             excevent = AppEvent(self.api_key, log_level,
                                 classification, event_type, event_message)
@@ -162,7 +171,8 @@ class TrakerrClient(object):
             raise TypeError("Argument is expected of class AppEvent.")
 
         self.fill_defaults(app_event)
-        self._events_api.events_post_with_http_info(app_event, callback=async_callback)
+        self._events_api.events_post_with_http_info(
+            app_event, callback=async_callback)
 
     def log(self, arg_dict, log_level="error", classification="issue", exc_info=None):
         """
@@ -174,8 +184,8 @@ class TrakerrClient(object):
          To construct with pure default values,pass in an empty dictionary.
          If you are getting the Stacktrace errname and message will be filled with
          the values from Stacktrace. Otherwise, both errname and errmessage will be unknown.
-        :param log_level: Strng representation on the level of the Error.
-         Can be 'debug','info','warning','error', 'fatal', defaults to 'error'.
+        :param log_level: String representation on the level of the Error.
+         Can be 'debug', 'info', 'warning', 'error', 'fatal', defaults to 'error'.
         :param classification: Optional extra string descriptor to clarify the error.
          (IE: log_level is fatal and classification may be 'hard lock' or 'Network error')
         :param exc_info: exc_info tuple to parse.
@@ -238,7 +248,7 @@ class TrakerrClient(object):
         if app_event.event_time is None:
             app_event.event_time = int(tdo.total_seconds() * 1000)
 
-    #getters and setters
+    # getters and setters
     @property
     def api_key(self):
         """api_key property"""
