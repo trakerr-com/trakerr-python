@@ -1,4 +1,4 @@
-# trakerr-python API client
+# Trakerr-python API client
 Get your application events and errors to Trakerr via the *Trakerr API*.
 
 You will need your API key to send events to trakerr.
