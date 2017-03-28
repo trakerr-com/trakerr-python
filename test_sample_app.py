@@ -1,12 +1,28 @@
-﻿
+﻿"""
+    trakerr Client API
+
+    Get your application events and errors to trakerr via the *trakerr API*.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+"""
+
 import sys
-
-# Normal automatic instantiation
-from trakerr import Trakerr
-
 # With handler, manual init
 import logging
 from trakerr import TrakerrHandler
+
+# Normal automatic instantiation
+from trakerr import Trakerr
 
 # Without handler custom peramiters
 from trakerr import TrakerrClient
@@ -24,7 +40,7 @@ def main(argv=None):
     api_key = "Api key here (or pass it in from the command line first param)"
     if len(argv) > 1:
         api_key = argv[1]
-    
+
     #Built in python handler
     logger = Trakerr.get_logger(api_key, "1.0", "newlogger")
     try:
@@ -46,10 +62,15 @@ def main(argv=None):
 
     client = TrakerrClient(api_key, "1.0", "development")
 
+    #Sending an error(or non-error) quickly without using the logger
+    client.log({"user":"jill@trakerr.io", "session":"25", "errname":"user logon issue",
+                "errmessage":"User refreshed the page."}, "info", "logon script", False)
+
+    #Sending an error(or non-error) with custom data without the logger
     try:
         raise IndexError("Index out of bounds.")
     except:
-        appevent = client.create_new_app_event("ERROR", "Index Error")
+        appevent = client.create_new_app_event("FATAL")
 
         # Populate any field with your own data, or send your own custom data
         appevent.context_app_os = "Windows 8"
