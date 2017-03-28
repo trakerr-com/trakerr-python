@@ -73,7 +73,8 @@ def main(argv=None):
         appevent = client.create_new_app_event("FATAL")
 
         # Populate any field with your own data, or send your own custom data
-        appevent.context_app_os = "Windows 8"
+        appevent.context_app_browser = "Chrome"
+        appevent.context_app_browser_version = "67.x"
         # Can support multiple ways to input data
         appevent.custom_properties = CustomData("Custom Data holder!")
         appevent.custom_properties.string_data = CustomStringData("Custom String Data 1",
