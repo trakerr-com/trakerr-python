@@ -85,6 +85,8 @@ from trakerr import TrakerrClient
 you can then send call log simply to send a quick error to Trakerr. Note the values that the argument dictionary takes are in the log docstring.
 
 ```python
+client = TrakerrClient("API Key here", "App Version number")
+
 client.log({"user":"jill@trakerr.io", "session":"25", "errname":"user logon issue",
             "errmessage":"User refreshed the page."}, "info", "logon script", False)
 ```
