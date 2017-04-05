@@ -93,8 +93,8 @@ class TrakerrClient(object):
         self._events_api = EventsApi(ApiClient(Configuration().host))
         # Should get the default url. Also try Configuration().host
 
-    def create_new_app_event(self, log_level="error", classification="Issue", event_type=None,
-                             event_message=None, exc_info=None):
+    def create_new_app_event(self, log_level="error", classification="Issue", event_type="unknown",
+                             event_message="unknown", exc_info=False):
         """
         Creates a new AppEvent instance.
         :param log_level: Strng representation on the level of the Error.
@@ -108,16 +108,19 @@ class TrakerrClient(object):
         :return: AppEvent instance with exc_info parsed depending on the above flags.
         """
         try:
-            if exc_info is None:
+            if exc_info is True or exc_info is None:
                 exc_info = sys.exc_info()
+                if not any(exc_info):
+                    exc_info = False
+
             if exc_info is not False:
                 if not TrakerrUtils.is_exc_info_tuple(exc_info):
                     raise TypeError(
                         "exc_info is expected an exc_info info tuple or False.")
                 errtype, value = exc_info[:2]
-                if event_type is None:
+                if event_type is None or event_type == "unknown":
                     event_type = TrakerrUtils.format_error_name(errtype)
-                if event_message is None:
+                if event_message is None or event_message == "unknown":
                     event_message = str(value)
 
             if (not isinstance(log_level, string_types)
@@ -161,36 +164,41 @@ class TrakerrClient(object):
         self.fill_defaults(app_event)
         self._events_api.events_post(app_event)
 
-    def send_event_async(self, app_event):
+    def send_event_async(self, app_event, call_back=None):
         """
         Asyncronously sends the given AppEvent instance to trakerr.
         :param app_event: AppEvent instance to send to trakerr.
+        :param call_back: Callback method for the async call.
+        defaults to module level async_callback.
         """
 
         if not isinstance(app_event, AppEvent):
             raise TypeError("Argument is expected of class AppEvent.")
 
+        if call_back is None:
+            call_back = async_callback
+
         self.fill_defaults(app_event)
         self._events_api.events_post_with_http_info(
-            app_event, callback=async_callback)
+            app_event, callback=call_back)
 
-    def log(self, arg_dict, log_level="error", classification="issue", exc_info=None):
+    def log(self, arg_dict, log_level="error", classification="issue", exc_info=True):
         """
         Creates an AppEvent and sends it with the default values to all fields.
         Allows the caller to pass in user and session as added information to log,
         to file the error under.
         :param arg_dict: Dictionary with any of these key value pairs assigned to a string:
-         errname, errmessage, user, session. You can leave any pair out that you don't need.
-         To construct with pure default values,pass in an empty dictionary.
-         If you are getting the Stacktrace errname and message will be filled with
-         the values from Stacktrace. Otherwise, both errname and errmessage will be unknown.
+        errname, errmessage, user, session. You can leave any pair out that you don't need.
+        To construct with pure default values,pass in an empty dictionary.
+        If you are getting the Stacktrace errname and message will be filled with
+        the values from Stacktrace. Otherwise, both errname and errmessage will be unknown.
         :param log_level: String representation on the level of the Error.
-         Can be 'debug', 'info', 'warning', 'error', 'fatal', defaults to 'error'.
+        Can be 'debug', 'info', 'warning', 'error', 'fatal', defaults to 'error'.
         :param classification: Optional extra string descriptor to clarify the error.
-         (IE: log_level is fatal and classification may be 'hard lock' or 'Network error')
+        (IE: log_level is fatal and classification may be 'hard lock' or 'Network error')
         :param exc_info: exc_info tuple to parse.
-         Default None to generate a exc_info tuple from the current stacktrace.
-         Pass False to not generate an exc_info tuple.
+        Default None to generate a exc_info tuple from the current stacktrace.
+        Pass False to not generate an exc_info tuple.
         """
         excevent = self.create_new_app_event(log_level,
                                              classification, arg_dict.get(
@@ -206,7 +214,7 @@ class TrakerrClient(object):
         fill out the the event with the instance defaults.
         :param app_event:  The app event to fill parameters out.
         :return: The fully filled out AppEvent object,
-         while also filling out the instance passed in.
+        while also filling out the instance passed in.
         """
 
         if not isinstance(app_event, AppEvent):
@@ -425,4 +433,4 @@ def async_callback(response):
     :param response: message returned after the async call is completed.
     """
 
-    pprint.pprint(str(response), sys.stderr)
+    #pprint.pprint(str(response), sys.stderr)
