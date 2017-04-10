@@ -22,9 +22,10 @@
     limitations under the License.
 """
 
-from pprint import pformat
-from six import iteritems
 import re
+from pprint import pformat
+
+from six import iteritems
 
 
 class Stacktrace(object):

@@ -17,6 +17,7 @@
 """
 
 import sys
+import os
 import traceback
 
 from six import *
@@ -57,7 +58,6 @@ class EventTraceBuilder(object):
             del exc_info
 
     @classmethod
-
     def _add_stack_trace(cls, trace_list, exc_info):
         """
         Adds a new trace to the current list of inner stacktraces.
@@ -80,6 +80,7 @@ class EventTraceBuilder(object):
             new_trace.type = TrakerrUtils.format_error_name(e_type)
             new_trace.message = str(value)
             trace_list.append(new_trace)
+
         finally:
             del exc_info
 
@@ -92,10 +93,14 @@ class EventTraceBuilder(object):
         """
 
         stacklines = StackTraceLines()
+        cwd = os.getcwd()
 
         for filename, line, func, _ in traceback.extract_tb(tb_):
             st_line = StackTraceLine()
-            st_line.file = filename
+            #Following might break if the user calling program changes the current working
+            #directory. For now, this should work, but this may lead to unintended
+            #concequences moving forward. The design decision originally was that this was fine.
+            st_line.file = os.path.relpath(filename, cwd)
             st_line.line = line
             st_line.function = func
             stacklines.append(st_line)
