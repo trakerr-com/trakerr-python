@@ -26,7 +26,7 @@ import sys
 from setuptools import setup, find_packages
 
 NAME = "trakerr"
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 
 # To install the library, run the following
 #
@@ -39,10 +39,10 @@ REQUIRES = ["urllib3 >= 1.15", "six >= 1.10", "certifi", "python-dateutil"]
 
 setup(
     name="Trakerr",
-    version="1.0",
+    version="1.1.0",
     description="Trakerr API",
     author_email="",
-    url="",
+    url="https://trakerr.io",
     keywords=["Swagger", "Trakerr API"],
     install_requires=REQUIRES,
     packages=find_packages(),
