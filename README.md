@@ -86,7 +86,7 @@ def main(argv=None):
 ```
 
 
-### Sending an error(or non-error) quickly without using the logger
+### Option 3: Sending an error(or non-error) quickly without using the logger
 You can quickly send a simple event with partial custom data from the log function of the `TrakerrClient`. Add these imports:
 
 ```python
@@ -131,8 +131,9 @@ def main(argv=None):
         #without a stacktrace, in case you do don't have a stacktrace or you're not sending a crash.
 
         #Populate any field with your own data, or send your own custom data
-        appevent.context_app_os = "Windows 8"
-        appevent.custom_properties = CustomData("Custom Data holder!")
+        appevent.context_app_browser = "Chrome"
+        appevent.context_app_browser_version = "57.0.2987.133"
+        appevent.custom_properties = CustomData()
         
         #Can support multiple string data
         appevent.custom_properties.string_data = CustomStringData("Custom String Data 1", "Custom String Data 2")
