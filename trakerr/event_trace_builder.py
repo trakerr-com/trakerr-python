@@ -97,7 +97,7 @@ class EventTraceBuilder(object):
 
         for filename, line, func, _ in traceback.extract_tb(tb_):
             st_line = StackTraceLine()
-            #Following might break if the user calling program changes the current working
+            #The following might break if the user calling program changes the current working
             #directory. For now, this should work, but this may lead to unintended
             #concequences moving forward. The design decision originally was that this was fine.
             st_line.file = os.path.relpath(filename, cwd)
