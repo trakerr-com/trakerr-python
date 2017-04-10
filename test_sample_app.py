@@ -28,6 +28,8 @@ from trakerr import Trakerr
 from trakerr import TrakerrClient
 from trakerr_client.models import CustomData, CustomStringData
 
+from test.test_sample_err import ErrorTest
+
 
 def main(argv=None):
     """
@@ -44,7 +46,7 @@ def main(argv=None):
     #Built in python handler
     logger = Trakerr.get_logger(api_key, "1.0", "newlogger")
     try:
-        error()
+        ErrorTest.error()
     except:
         logger.exception("Corrupt file.")
 
@@ -87,13 +89,6 @@ def main(argv=None):
         client.send_event_async(appevent)
 
     return 0
-
-
-def error():
-    """
-    Function that reads a file.
-    """
-    raise EOFError("I forgot a newline!")
 
 
 if __name__ == "__main__":
