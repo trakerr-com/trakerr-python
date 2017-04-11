@@ -149,6 +149,8 @@ def main(argv=None):
     return 0
 ```
 
+If you are using Django, we recommend that you look at [django user agents](https://github.com/selwin/django-user_agents) as a simple and quick way of getting the browser's name and version rather than parsing the user agent yourself. The library also allows you to use the client browser in the template, allowing you to modify the front end to the error accordingly. Please note that this library is _not maintained by Trakerr_.
+
 ## An in-depth look at TrakerrClient's properties
 TrakerrClient's constructor initalizes the default values to all of TrakerrClient's properties.
 
