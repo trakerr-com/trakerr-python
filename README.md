@@ -102,7 +102,7 @@ client.log({"user":"jill@trakerr.io", "session":"25", "errname":"user logon issu
             "errmessage":"User refreshed the page."}, "info", "logon script", False)
 ```
 
-You can call this from an `except` if you wish to send an error with a stacktrace.
+You can call this from an `except` and leave off the false parameter if you wish to send an error with a stacktrace.
 
 ### Option 4: Add Custom Data
 You can send custom data as part of your error event if you need to. This circumvents the python handler. Add these imports:
