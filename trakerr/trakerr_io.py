@@ -80,8 +80,8 @@ class TrakerrClient(object):
         self._context_env_language = self.context_env_language = "Python"
         self._context_env_name = self.context_env_name = platform.python_implementation()
         self._context_env_version = self.context_env_version = platform.python_version()
-        # Join is supposed to be faster than + operator
         self._context_env_hostname = self.context_env_hostname = platform.node()
+        # Join is supposed to be faster than + operator
         self._context_appos = self.context_appos = seq.join(
             (platform.system(), platform.release()))
         self._context_appos_version = self.context_appos_version = platform.version()
