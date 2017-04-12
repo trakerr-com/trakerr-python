@@ -178,9 +178,6 @@ Name | Type | Description | Notes
 **contextDataCenterRegion** | **string** | Data center region. | Defaults to `None`
 
 
-The server accepts the final two arguments before url_path, but they are currently in development on this api level, so if you are using django or another web framework; please use the REST API. They are not currently available in the `TrakerrClient` constructor.
-
-
 ## Documentation For Models
 
  - [AppEvent](https://github.com/trakerr-io/trakerr-python/blob/master/generated/docs/AppEvent.md)
