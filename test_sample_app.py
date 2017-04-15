@@ -28,6 +28,7 @@ from trakerr import Trakerr
 from trakerr import TrakerrClient
 from trakerr_client.models import CustomData, CustomStringData
 
+#imports a file with methods to show off the stacktrace.
 from test.test_sample_err import ErrorTest
 
 
@@ -72,7 +73,7 @@ def main(argv=None):
     try:
         raise IndexError("Index out of bounds.")
     except:
-        appevent = client.create_new_app_event("FATAL")
+        appevent = client.create_new_app_event("FATAL", exc_info=True)
 
         # Populate any field with your own data, or send your own custom data
         appevent.context_app_browser = "Chrome"

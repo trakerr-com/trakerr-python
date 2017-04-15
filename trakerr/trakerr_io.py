@@ -137,13 +137,12 @@ class TrakerrClient(object):
             #Accepted value string parsing.
             #Leave the appevent incase someone wants to fill it out themselves as an error.
             #But we just want to default to error here.
-            log_level = log_level.lower()
-            allowed_values = ["debug", "info", "warning", "error", "fatal"]
-            if log_level not in allowed_values:
-                log_level = "error"
-
-            excevent = AppEvent(self.api_key, log_level,
-                                classification, event_type, event_message)
+            excevent = AppEvent(self.api_key, classification=classification,
+                                event_type=event_type, event_message=event_message)
+            try:
+                excevent.log_level = log_level.lower()
+            except ValueError:
+                excevent.log_level = "error"
 
             if exc_info is not False:
                 excevent.event_stacktrace = EventTraceBuilder.get_event_traces(
