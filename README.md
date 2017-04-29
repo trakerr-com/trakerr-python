@@ -7,33 +7,34 @@ You will need your API key to send events to trakerr.
 
 Python 2.7 and 3.4+
 
-## Installation & Usage
-### pip install
+## 3 minute install guide
+If you're already using the python logger in some capacity, you can integrate with Trakerr quickly. First, issue a pip install to get the latest version:
 
 To install from master, simply use:
-```sh
+```bash
 pip install git+https://github.com/trakerr-io/trakerr-python.git
 ```
 (you may need to run `pip` with root permission: `sudo pip install git+https://github.com/trakerr-io/trakerr-python.git`)
 
-You can run the following command to update an exsisting installation to the latest commit on master:
-```sh
-pip install git+https://github.com/trakerr-io/trakerr-python.git --upgrade
-```
+Once installation is complete, add this import from wherever you instanciate your loggers.
 
-You can install from a branch (Not recommended for production use):
-```sh
-pip install git+https://github.com/trakerr-io/trakerr-python.git#<branch_name_here>
-```
-
-Then import the package in your code:
 ```python
-import trakerr
+import logging #Your previous logging import here
+from trakerr import TrakerrHandler #New import.
 ```
+
+And then you'll need to create a handler and a logger object and attach them before you can use them later on.
+
+```python
+logger = logging.getLogger("Logger name")#Your original logger
+th = TrakerrHandler("API KEY here", "App Version number here") #Instantiate Trakerr's logger handler
+logger.addHandler(th) #Attach our handler to your logger.
+```
+
+And you should be able to now send basic events and information to trakerr. If you are only using trakerr to log, or want to send more in depth events, read on below.
 
 ## Getting Started
-
-Please follow the [installation procedure](#installation--usage) and you're set to add Trakerr to your project. All of these examples are included in test_sample_app.py.
+By using the pip command above, you can also use trakerr in a multitude of different ways.
 
 ### Option 1: Automatic initialization of the python logger
 Along with your imports, add:
@@ -59,34 +60,7 @@ def main(argv=None):
     return 0
 ```
 
-### Option 2: Manual initialization of the handler, attach it to a python logger
-You can initialize the handler directly and attach it to your own logger, if you want direct control over it. This is useful if you want your own custom logger. An example with the base logger follows.
-
-You'll need to add these imports:
-
-```python
-import logging
-from trakerr import TrakerrHandler
-```
-
-And then you'll need to create a handler and a logger object and attach them before you can use them later on.
-
-```python
-def main(argv=None):
-    logger = logging.getLogger("Logger name")
-    th = TrakerrHandler("API KEY", "App Version number here")
-    logger.addHandler(th)
-
-    try:
-        raise ArithmeticError()
-    except:
-       logger.exception("Bad math.")
-
-    return 0
-```
-
-
-### Option 3: Sending an error(or non-error) quickly without using the logger
+### Option 2: Sending an error(or non-error) quickly without using the logger
 You can quickly send a simple event with partial custom data from the log function of the `TrakerrClient`. Add these imports:
 
 ```python
@@ -104,7 +78,7 @@ client.log({"user":"jill@trakerr.io", "session":"25", "errname":"user logon issu
 
 You can call this from an `except` and leave off the false parameter if you wish to send an error with a stacktrace.
 
-### Option 4: Add Custom Data
+### Option 3: Add Custom Data
 You can send custom data as part of your error event if you need to. This circumvents the python handler. Add these imports:
 
 ```python
@@ -177,6 +151,16 @@ Name | Type | Description | Notes
 **contextDataCenter** | **string** | Data center the application is running on or connected to. | Defaults to `None`
 **contextDataCenterRegion** | **string** | Data center region. | Defaults to `None`
 
+## Advanced pip install commands
+You can run the following command to update an exsisting installation to the latest commit on master:
+```bash
+pip install git+https://github.com/trakerr-io/trakerr-python.git --upgrade
+```
+
+You can install from a branch (Not recommended for production use):
+```bash
+pip install git+https://github.com/trakerr-io/trakerr-python.git#<branch_name_here>
+```
 
 ## Documentation For Models
 
