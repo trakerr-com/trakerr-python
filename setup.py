@@ -21,12 +21,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-
-import sys
 from setuptools import setup, find_packages
 
-NAME = "trakerr"
-VERSION = "1.1.0"
+NAME = "Trakerr"
+VERSION = "2.1.1"
 
 # To install the library, run the following
 #
@@ -38,8 +36,8 @@ VERSION = "1.1.0"
 REQUIRES = ["urllib3 >= 1.15", "six >= 1.10", "certifi", "python-dateutil"]
 
 setup(
-    name="Trakerr",
-    version="1.1.0",
+    name=NAME,
+    version=VERSION,
     description="Trakerr API",
     author_email="",
     url="https://trakerr.io",

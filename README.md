@@ -1,13 +1,13 @@
-# Trakerr-python API client
+# Trakerr-Python API client
 Get your application events and errors to Trakerr via the *Trakerr API*.
 
 You will need your API key to send events to trakerr.
 
-## Requirements.
+## Requirements
 
 Python 2.7 and 3.4+
 
-## 3 minute install guide
+## 3-minute Integration Guide
 If you're already using the python logger in some capacity, you can integrate with Trakerr quickly. First, issue a pip install to get the latest version:
 
 To install from master, simply use:
@@ -36,7 +36,10 @@ And you should be able to now send basic events and information to trakerr. If y
 ## Getting Started
 By using the pip command above, you can also use trakerr in a multitude of different ways.
 
-### Option 1: Automatic initialization of the python logger
+### Option-1: Attaching Trakerr to an exsisting logger
+Follow the instructions in the [three minute integration guide](#3-minute Integration Guide) to attach trakerr to a logger you've already written.
+
+### Option-2: Creating a new logger for Trakerr
 Along with your imports, add:
 
 ```python
@@ -60,7 +63,7 @@ def main(argv=None):
     return 0
 ```
 
-### Option 2: Sending an error(or non-error) quickly without using the logger
+### Option-3: Sending an error(or non-error) quickly without using the logger
 You can quickly send a simple event with partial custom data from the log function of the `TrakerrClient`. Add these imports:
 
 ```python
@@ -78,7 +81,7 @@ client.log({"user":"jill@trakerr.io", "session":"25", "errname":"user logon issu
 
 You can call this from an `except` and leave off the false parameter if you wish to send an error with a stacktrace.
 
-### Option 3: Add Custom Data
+### Option-4: Add Custom Data
 You can send custom data as part of your error event if you need to. This circumvents the python handler. Add these imports:
 
 ```python
@@ -151,7 +154,7 @@ Name | Type | Description | Notes
 **contextDataCenter** | **string** | Data center the application is running on or connected to. | Defaults to `None`
 **contextDataCenterRegion** | **string** | Data center region. | Defaults to `None`
 
-## Advanced pip install commands
+## Advanced pip install commands for Trakerr
 You can run the following command to update an exsisting installation to the latest commit on master:
 ```bash
 pip install git+https://github.com/trakerr-io/trakerr-python.git --upgrade
