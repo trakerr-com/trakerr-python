@@ -4,7 +4,6 @@ Get your application events and errors to Trakerr via the *Trakerr API*.
 You will need your API key to send events to trakerr.
 
 ## Requirements
-
 Python 2.7 and 3.4+
 
 ## 3-minute Integration Guide
