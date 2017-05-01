@@ -27,7 +27,7 @@ And then you'll need to create a handler and a logger object and attach them bef
 
 ```python
 logger = logging.getLogger("Logger name")#Your original logger
-th = TrakerrHandler("API KEY here", "App Version number here") #Instantiate Trakerr's logger handler
+th = TrakerrHandler("API KEY here", "App Version number here", "Deployment stage here") #Instantiate Trakerr's logger handler
 logger.addHandler(th) #Attach our handler to your logger.
 ```
 
