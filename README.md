@@ -37,7 +37,7 @@ And you should be able to now send basic events and information to trakerr. If y
 By using the pip command above, you can also use trakerr in a multitude of different ways.
 
 ### Option-1: Attaching Trakerr to an exsisting logger
-Follow the instructions in the [three minute integration guide](#3-minute Integration Guide) to attach trakerr to a logger you've already written.
+Follow the instructions in the [three minute integration guide](#3-minute-Integration-Guide) to attach trakerr to a logger you've already written.
 
 ### Option-2: Creating a new logger for Trakerr
 Along with your imports, add:
