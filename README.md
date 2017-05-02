@@ -26,7 +26,7 @@ And then you'll need to create a handler and a logger object and attach them bef
 
 ```python
 logger = logging.getLogger("Logger name")#Your original logger
-th = TrakerrHandler("API KEY here", "App Version number here", "Deployment stage here") #Instantiate Trakerr's logger handler
+th = TrakerrHandler("<api-key>", "App Version number here", "Deployment stage here") #Instantiate Trakerr's logger handler
 logger.addHandler(th) #Attach our handler to your logger.
 ```
 
@@ -52,7 +52,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     
-    logger = Trakerr.getLogger("API KEY", "App Version number here", "Logger Name")
+    logger = Trakerr.getLogger("<api-key>", "App Version number here", "Logger Name")
 
     try:
         raise FloatingPointError()
@@ -72,7 +72,7 @@ from trakerr import TrakerrClient
 you can then send call log simply to send a quick error to Trakerr. Note the values that the argument dictionary takes are in the log docstring.
 
 ```python
-client = TrakerrClient("API Key here", "App Version number")
+client = TrakerrClient("<api-key>", "App Version number")
 
 client.log({"user":"jill@trakerr.io", "session":"25", "errname":"user logon issue",
             "errmessage":"User refreshed the page."}, "info", "logon script", False)
@@ -95,7 +95,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
 
-    client = TrakerrClient("API Key here", "App Version number")
+    client = TrakerrClient("<api-key>", "App Version number")
 
     try:
         raise IndexError("Bad Math")
