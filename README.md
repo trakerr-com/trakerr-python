@@ -1,4 +1,4 @@
-# Trakerr-Python API client
+# Trakerr - Python API client
 Get your application events and errors to Trakerr via the *Trakerr API*.
 
 You will need your API key to send events to trakerr.
@@ -15,7 +15,7 @@ pip install git+https://github.com/trakerr-io/trakerr-python.git
 ```
 (you may need to run `pip` with root permission: `sudo pip install git+https://github.com/trakerr-io/trakerr-python.git`)
 
-Once installation is complete, add this import from wherever you instanciate your loggers.
+Once installation is complete, add this import from wherever you instantiate your loggers.
 
 ```python
 import logging #Your previous logging import here
@@ -32,7 +32,7 @@ logger.addHandler(th) #Attach our handler to your logger.
 
 And you should be able to now send basic events and information to trakerr. If you are only using trakerr to log, or want to send more in depth events, read on below.
 
-## Getting Started
+## Detailed Integration Guide
 By using the pip command above, you can also use trakerr in a multitude of different ways.
 
 ### Option-1: Attaching Trakerr to an exsisting logger
@@ -140,9 +140,9 @@ The TrakerrClient class however has a lot of exposed properties. The benefit to 
 Name | Type | Description | Notes
 ------------ | ------------- | -------------  | -------------
 **apiKey** | **string** | API key generated for the application | 
-**contextAppVersion** | **string** | Application version information. | Default value: "1.0" 
-**contextDevelopmentStage** | **string** | One of development, staging, production; or a custom string. | Default Value: "develoment"
-**contextEnvLanguage** | **string** | Constant string representing the language the application is in. | Default value: "python"
+**contextAppVersion** | **string** | Application version information. | Default value: `1.0`
+**contextDevelopmentStage** | **string** | One of development, staging, production; or a custom string. | Default Value: `development`
+**contextEnvLanguage** | **string** | Constant string representing the language the application is in. | Default value: `python`
 **contextEnvName** | **string** | Name of the interpreter the program is run on. | Default Value: `platform.python_implementation()`
 **contextEnvVersion** | **string** | Version of python this program is running on. | Default Value: `platform.python_version()`
 **contextEnvHostname** | **string** | Hostname or ID of environment. | Default value: `platform.node()`
