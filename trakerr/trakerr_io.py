@@ -93,7 +93,7 @@ class TrakerrClient(object):
         self._events_api = EventsApi(ApiClient(Configuration().host))
         # Should get the default url. Also try Configuration().host
 
-    def create_new_app_event(self, log_level="error", classification="Issue", event_type="unknown",
+    def create_new_app_event(self, log_level="error", classification="issue", event_type="unknown",
                              event_message="unknown", exc_info=False):
         """
         Creates a new AppEvent instance.
@@ -139,6 +139,11 @@ class TrakerrClient(object):
             #But we just want to default to error here.
             excevent = AppEvent(self.api_key, classification=classification,
                                 event_type=event_type, event_message=event_message)
+
+            #Of all things, the python logger logs fatals as criticals.
+            #I'll correct it manually here.
+            if log_level == "critical":
+                log_level = "fatal"
             try:
                 excevent.log_level = log_level.lower()
             except ValueError:

@@ -25,12 +25,26 @@ from trakerr import TrakerrHandler #New import.
 And then you'll need to create a handler and a logger object and attach them before you can use them later on.
 
 ```python
-logger = logging.getLogger("Logger name")#Your original logger
-th = TrakerrHandler("<api-key>", "App Version number here", "Deployment stage here") #Instantiate Trakerr's logger handler
-logger.addHandler(th) #Attach our handler to your logger.
+#Your original logger.
+logger = logging.getLogger("Logger name")
+#Instantiate Trakerr's logger handler. By default the handler will only log WARNING and above.
+th = TrakerrHandler("<api-key>", "App Version number here", "Deployment stage here")
+#Attach our handler to your logger.
+logger.addHandler(th)
 ```
+The handler's full constructor signature is as follows:
+```python
+def __init__(self, api_key=None, app_version="1.0", context_deployment_stage="deployment",
+                 client=None, level=logging.WARNING):
+```
+The parameters are as follows
+- **api_key**: should be your api key from trakerr.
+- **app_version**: should be your code's app version.
+- **deployment_stage**: is the stage of the codebase you are pulling events from (production, test, development, ect). 
+- **client**: allows you to pass in a preconfigured `TrakerrClient` instance, which allows you to provide a client with custom values. If you provide a client, the values of the first three parameters do not matter.
+- **level**: Allows you to set the level of events that this handler can emit. By default, TrakerrHandler will send warnings and above to trakerr. This way, if you're using more than one handler, you can set the logger to log all events, and set trakerr to log only warnings and above, while sending infos and above with another handler.
 
-And you should be able to now send basic events and information to trakerr. If you are only using trakerr to log, or want to send more in depth events, read on below.
+You should be able to now send basic events and information to trakerr. If you are only using trakerr to log, or want to send more in depth events, read on below.
 
 ## Detailed Integration Guide
 By using the pip command above, you can also use trakerr in a multitude of different ways.
