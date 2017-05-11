@@ -24,7 +24,7 @@
 from setuptools import setup, find_packages
 
 NAME = "Trakerr"
-VERSION = "2.1.2"
+VERSION = "2.1.3"
 
 # To install the library, run the following
 #
