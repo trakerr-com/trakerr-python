@@ -66,7 +66,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     
-    logger = Trakerr.getLogger("<api-key>", "App Version number here", "Logger Name")
+    logger = Trakerr.get_logger("<api-key>", "App Version number here", "Logger Name")
 
     try:
         raise FloatingPointError()

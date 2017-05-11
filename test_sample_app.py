@@ -20,14 +20,14 @@
 import sys
 # With handler, manual init
 import logging
-from trakerr.trakerr_handler import TrakerrHandler
+from trakerr import TrakerrHandler
 
 # Normal automatic instantiation
-#from trakerr.log_utils import Trakerr
+#from trakerr import Trakerr
 
 # Without handler custom peramiters
 #from trakerr import TrakerrClient
-#from trakerr_client.models import CustomData, CustomStringData
+#from trakerr_client import CustomData, CustomStringData
 
 #imports a file with methods to show off the stacktrace.
 #from test.test_sample_err import ErrorTest
