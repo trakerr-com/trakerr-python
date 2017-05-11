@@ -34,14 +34,7 @@ class TrakerrUtils(object):
         :return: A string with either the found string,
          or a string representation of the type object if it cannot find the patern above.
         """
-
-        name = str(error_type)
-        rules = re.compile(r"\w+\.\w+", re.IGNORECASE)
-        found = rules.findall(name)
-        if len(found) > 0:
-            name = found[0]
-
-        return name
+        return (error_type.__class__.__module__).strip('_') + "." + error_type.__name__
 
     @classmethod
     def is_exc_info_tuple(cls, exc_info):
