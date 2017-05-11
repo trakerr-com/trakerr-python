@@ -15,9 +15,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 """
+
 import logging
 
-from trakerr_handler import TrakerrHandler
+from trakerr.trakerr_handler import TrakerrHandler
 
 class Trakerr(object):
     """

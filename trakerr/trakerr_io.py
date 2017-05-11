@@ -29,8 +29,8 @@ from trakerr_client import ApiClient, Configuration
 from trakerr_client.apis import EventsApi
 from trakerr_client.models import *
 
-from event_trace_builder import EventTraceBuilder
-from trakerr_utils import TrakerrUtils
+from trakerr.event_trace_builder import EventTraceBuilder
+from trakerr.trakerr_utils import TrakerrUtils
 
 
 class TrakerrClient(object):

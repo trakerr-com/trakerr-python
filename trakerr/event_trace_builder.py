@@ -23,7 +23,7 @@ import traceback
 from six import *
 
 from trakerr_client.models import *
-from trakerr_utils  import TrakerrUtils
+from trakerr.trakerr_utils  import TrakerrUtils
 
 
 class EventTraceBuilder(object):

@@ -55,8 +55,7 @@ class TrakerrUtils(object):
             errtype, value, tback = exc_info
             if all([x is None for x in exc_info]):
                 return True
-
-            elif all((isinstance(errtype, types.TypeType),
+            elif all((isinstance(errtype, type),
                       isinstance(value, Exception),
                       hasattr(tback, 'tb_frame'),
                       hasattr(tback, 'tb_lineno'),

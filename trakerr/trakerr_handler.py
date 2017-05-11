@@ -1,6 +1,6 @@
-﻿import logging
-from trakerr_io import TrakerrClient
-from trakerr_utils import TrakerrUtils
+﻿
+import logging
+from trakerr.trakerr_io import TrakerrClient
 
 class TrakerrHandler(logging.Handler):
     """

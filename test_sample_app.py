@@ -16,20 +16,21 @@
     limitations under the License.
 """
 
+
 import sys
 # With handler, manual init
 import logging
-from trakerr import TrakerrHandler
+from trakerr.trakerr_handler import TrakerrHandler
 
 # Normal automatic instantiation
-from trakerr import Trakerr
+#from trakerr.log_utils import Trakerr
 
 # Without handler custom peramiters
-from trakerr import TrakerrClient
-from trakerr_client.models import CustomData, CustomStringData
+#from trakerr import TrakerrClient
+#from trakerr_client.models import CustomData, CustomStringData
 
 #imports a file with methods to show off the stacktrace.
-from test.test_sample_err import ErrorTest
+#from test.test_sample_err import ErrorTest
 
 
 def main(argv=None):
@@ -45,11 +46,11 @@ def main(argv=None):
         api_key = argv[1]
 
     #Built in python handler
-    logger = Trakerr.get_logger(api_key, "1.0", "newlogger")
-    try:
-        ErrorTest.error()
-    except:
-        logger.exception("Corrupt file.")
+    #logger = Trakerr.get_logger(api_key, "1.0", "newlogger")
+    #try:
+        #ErrorTest.error()
+    #except:
+        #logger.exception("Corrupt file.")
 
 
     # Manual instantiation of the logger.
@@ -63,31 +64,31 @@ def main(argv=None):
         logger2.exception("Bad math.")
 
 
-    client = TrakerrClient(api_key, "1.0", "development")
+    #client = TrakerrClient(api_key, "1.0", "development")
 
     #Sending an error(or non-error) quickly without using the logger
-    client.log({"user":"jill@trakerr.io", "session":"25", "errname":"user logon issue",
-                "errmessage":"User refreshed the page."}, "info", "logon script", False)
+    #client.log({"user":"jill@trakerr.io", "session":"25", "errname":"user logon issue",
+                #"errmessage":"User refreshed the page."}, "info", "logon script", False)
 
     #Sending an error(or non-error) with custom data without the logger
-    try:
-        raise IndexError("Index out of bounds.")
-    except:
-        appevent = client.create_new_app_event("FATAL", exc_info=True)
+    #try:
+        #raise IndexError("Index out of bounds.")
+    #except:
+        #appevent = client.create_new_app_event("FATAL", exc_info=True)
 
         # Populate any field with your own data, or send your own custom data
-        appevent.context_app_browser = "Chrome"
-        appevent.context_app_browser_version = "67.x"
+        #appevent.context_app_browser = "Chrome"
+        #appevent.context_app_browser_version = "67.x"
         # Can support multiple ways to input data
-        appevent.custom_properties = CustomData("Custom Data holder!")
-        appevent.custom_properties.string_data = CustomStringData("Custom String Data 1",
-                                                                  "Custom String Data 2")
-        appevent.custom_properties.string_data.custom_data3 = "More Custom Data!"
-        appevent.event_user = "john@traker.io"
-        appevent.event_session = "6"
+        #appevent.custom_properties = CustomData("Custom Data holder!")
+        #appevent.custom_properties.string_data = CustomStringData("Custom String Data 1",
+                                                                  #"Custom String Data 2")
+        #appevent.custom_properties.string_data.custom_data3 = "More Custom Data!"
+        #appevent.event_user = "john@traker.io"
+        #appevent.event_session = "6"
 
         # send it to trakerr
-        client.send_event_async(appevent)
+        #client.send_event_async(appevent)
 
     return 0
 
