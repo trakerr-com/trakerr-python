@@ -27,8 +27,10 @@ And then you'll need to create a handler and a logger object and attach them bef
 ```python
 #Your original logger.
 logger = logging.getLogger("Logger name")
+
 #Instantiate Trakerr's logger handler. By default the handler will only log WARNING and above.
 th = TrakerrHandler("<api-key>", "App Version number here", "Deployment stage here")
+
 #Attach our handler to your logger.
 logger.addHandler(th)
 ```
