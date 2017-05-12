@@ -92,7 +92,7 @@ you can then send call log simply to send a quick error to Trakerr.
 ```python
 client = TrakerrClient("<api-key>", "App Version number")
 
-client.log({"user":"jill@trakerr.io", "session":"25", "eventname":"user logon issue",
+client.log({"user":"jill@trakerr.io", "session":"25", "eventtype":"user logon issue",
             "eventmessage":"User refreshed the page."}, "info", "logon script", False)
 ```
 

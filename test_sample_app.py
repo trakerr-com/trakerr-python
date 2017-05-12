@@ -55,7 +55,8 @@ def main(argv=None):
 
     #Manual instantiation of the logger.
     logger2 = logging.getLogger("Logger name")
-    trakerr_handler = TrakerrHandler(api_key, "1.0")
+    logger2.setLevel(logging.INFO)
+    trakerr_handler = TrakerrHandler(api_key, "1.0", level=logging.INFO)
     logger2.addHandler(trakerr_handler)
 
     try:
@@ -63,12 +64,14 @@ def main(argv=None):
     except:
         logger2.warning("Bad math.", exc_info=True)
 
+    logger2.info("Hi there.")
+
 
     client = TrakerrClient(api_key, "1.0", "development")
 
     #Sending an error(or non-error) quickly without using the logger
-    client.log({"user":"jill@trakerr.io", "session":"25", "evntname":"user logon issue",
-                "evntmessage":"User refreshed the page."}, "info", "logon script", False)
+    client.log({"user":"jill@trakerr.io", "session":"25", "eventtype":"user logon issue",
+                "eventmessage":"User refreshed the page."}, "info", "logon script", False)
 
     #Sending an error(or non-error) with custom data without the logger
     try:

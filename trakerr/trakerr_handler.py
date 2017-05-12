@@ -34,13 +34,13 @@ class TrakerrHandler(logging.Handler):
         Overload emit to send to trakerr.
         :param record: Record object returned by the super handler.
         """
-        #Check if record actually has a stacktrace.
+        classification = "issue"
+        args = {'eventmessage':record.getMessage(), 'tags':[record.name]}
         info = record.exc_info
+        #Check if record actually has a stacktrace.
         if info is None or info.count(None) == len(info):
             info = False
-        args = {'eventmessage':record.getMessage(), 'tags':[record.name]}
-        classification = "issue"
-        if (record.levelname.lower() == "debug") or (record.levelname.lower() == "info"):
             args['eventtype'] = record.name
+        if (record.levelname.lower() == "debug") or (record.levelname.lower() == "info"):
             classification = "log"
         self.trakerr_client.log(args, record.levelname.lower(), classification, exc_info=info)
