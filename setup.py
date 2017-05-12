@@ -24,7 +24,8 @@
 from setuptools import setup, find_packages
 
 NAME = "Trakerr"
-VERSION = "2.1.3"
+VERSION = "2.2.0"
+
 
 # To install the library, run the following
 #
@@ -33,7 +34,7 @@ VERSION = "2.1.3"
 # prerequisite: setuptools
 # http://pypi.python.org/pypi/setuptools
 
-REQUIRES = ["urllib3 >= 1.15", "six >= 1.10", "certifi", "python-dateutil"]
+REQUIRES = ["urllib3 >= 1.20", "six >= 1.10", "psutil >=5.2.2, < 6", "certifi", "python-dateutil"]
 
 setup(
     name=NAME,
@@ -45,7 +46,7 @@ setup(
     install_requires=REQUIRES,
     packages=find_packages(),
     include_package_data=True,
-    long_description="""\
+    long_description="""
     Get your application events and errors to Trakerr via the *Trakerr API*.
     """
 )

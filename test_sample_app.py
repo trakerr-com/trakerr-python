@@ -18,19 +18,19 @@
 
 
 import sys
-# With handler, manual init
+#With handler, creating the logger seperately.
 import logging
 from trakerr import TrakerrHandler
 
-# Normal automatic instantiation
-#from trakerr import Trakerr
+#Normal automatic instantiation
+from trakerr import Trakerr
 
-# Without handler custom peramiters
-#from trakerr import TrakerrClient
-#from trakerr_client import CustomData, CustomStringData
+#Without handler custom peramiters
+from trakerr import TrakerrClient
+from trakerr_client.models import CustomData, CustomStringData
 
 #imports a file with methods to show off the stacktrace.
-#from test.test_sample_err import ErrorTest
+from test.test_sample_err import ErrorTest
 
 
 def main(argv=None):
@@ -46,14 +46,14 @@ def main(argv=None):
         api_key = argv[1]
 
     #Built in python handler
-    #logger = Trakerr.get_logger(api_key, "1.0", "newlogger")
-    #try:
-        #ErrorTest.error()
-    #except:
-        #logger.exception("Corrupt file.")
+    logger = Trakerr.get_logger(api_key, "1.0", "newlogger")
+    try:
+        ErrorTest.error()
+    except:
+        logger.exception("Corrupt file.")
 
 
-    # Manual instantiation of the logger.
+    #Manual instantiation of the logger.
     logger2 = logging.getLogger("Logger name")
     trakerr_handler = TrakerrHandler(api_key, "1.0")
     logger2.addHandler(trakerr_handler)
@@ -61,38 +61,44 @@ def main(argv=None):
     try:
         raise ArithmeticError("2+2 is 5!")
     except:
-        logger2.exception("Bad math.")
+        logger2.warning("Bad math.", exc_info=True)
 
 
-    #client = TrakerrClient(api_key, "1.0", "development")
+    client = TrakerrClient(api_key, "1.0", "development")
 
     #Sending an error(or non-error) quickly without using the logger
-    #client.log({"user":"jill@trakerr.io", "session":"25", "errname":"user logon issue",
-                #"errmessage":"User refreshed the page."}, "info", "logon script", False)
+    client.log({"user":"jill@trakerr.io", "session":"25", "evntname":"user logon issue",
+                "evntmessage":"User refreshed the page."}, "info", "logon script", False)
 
     #Sending an error(or non-error) with custom data without the logger
-    #try:
-        #raise IndexError("Index out of bounds.")
-    #except:
-        #appevent = client.create_new_app_event("FATAL", exc_info=True)
+    try:
+        raise IndexError("Index out of bounds.")
+    except:
+        appevent = client.create_new_app_event("FATAL", exc_info=True)
 
-        # Populate any field with your own data, or send your own custom data
-        #appevent.context_app_browser = "Chrome"
-        #appevent.context_app_browser_version = "67.x"
-        # Can support multiple ways to input data
-        #appevent.custom_properties = CustomData("Custom Data holder!")
-        #appevent.custom_properties.string_data = CustomStringData("Custom String Data 1",
-                                                                  #"Custom String Data 2")
-        #appevent.custom_properties.string_data.custom_data3 = "More Custom Data!"
-        #appevent.event_user = "john@traker.io"
-        #appevent.event_session = "6"
+        #Populate any field with your own data, or send your own custom data
+        appevent.context_app_browser = "Chrome"
+        appevent.context_app_browser_version = "67.x"
 
-        # send it to trakerr
-        #client.send_event_async(appevent)
+        #Can support multiple ways to input data
+        appevent.custom_properties = CustomData("Custom Data holder!")
+        appevent.custom_properties.string_data = CustomStringData("Custom String Data 1",
+                                                                  "Custom String Data 2")
+        appevent.custom_properties.string_data.custom_data3 = "More Custom Data!"
+        appevent.event_user = "john@traker.io"
+        appevent.event_session = "6"
+
+        appevent.context_operation_time_millis = 1000
+        appevent.context_device = "pc"
+        appevent.context_app_sku = "mobile"
+        appevent.context_tags = ["client, frontend"]
+
+        #Send it to trakerr
+        client.send_event_async(appevent)
 
     return 0
 
 
 if __name__ == "__main__":
-    # main()
+    #main()
     sys.exit(main())

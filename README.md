@@ -4,7 +4,7 @@ Get your application events and errors to Trakerr via the *Trakerr API*.
 You will need your API key to send events to trakerr.
 
 ## Requirements
-Python 2.7 and 3.4+
+Python 2.7.9+ and 3.4+
 
 ## 3-minute Integration Guide
 If you're already using the python logger in some capacity, you can integrate with Trakerr quickly. First, issue a pip install to get the latest version:
@@ -13,7 +13,9 @@ To install from master, simply use:
 ```bash
 pip install git+https://github.com/trakerr-io/trakerr-python.git
 ```
-(you may need to run `pip` with root permission: `sudo pip install git+https://github.com/trakerr-io/trakerr-python.git`)
+(you may need to run `pip` with root permission: `sudo -H pip install git+https://github.com/trakerr-io/trakerr-python.git`)
+
+or upgrade an installation with a command from the [advanced pip commands](#Advanced-pip-install-commands-for-Trakerr) section.
 
 Once installation is complete, add this import from wherever you instantiate your loggers.
 
@@ -85,16 +87,38 @@ You can quickly send a simple event with partial custom data from the log functi
 from trakerr import TrakerrClient
 ```
 
-you can then send call log simply to send a quick error to Trakerr. Note the values that the argument dictionary takes are in the log docstring.
+you can then send call log simply to send a quick error to Trakerr.
 
 ```python
 client = TrakerrClient("<api-key>", "App Version number")
 
-client.log({"user":"jill@trakerr.io", "session":"25", "errname":"user logon issue",
-            "errmessage":"User refreshed the page."}, "info", "logon script", False)
+client.log({"user":"jill@trakerr.io", "session":"25", "eventname":"user logon issue",
+            "eventmessage":"User refreshed the page."}, "info", "logon script", False)
 ```
 
-You can call this from an `except` and leave off the false parameter if you wish to send an error with a stacktrace.
+The full signature of log is as follows:
+```python
+def log(self, arg_dict, log_level="error", classification="issue", exc_info=True):
+```
+
+If exc\_info is True, it will poll `sys.exc_info()` for the latest error stack information. If this is false, then the event will not generate a stack trace. If exc\_info is is a tuple of exc\_info, then the event will be created using that exc\_info.
+
+arg\_dict is a dictionary which makes it simple to pass in basic AppEvent information without using the more extensive methods below. The items arg\_dict looks for are as follows:
+
+- "eventtype":(maps to string) The name of the event. This will autmatically be filled if nothing is passed in when you are sending and event with a stacktrace.
+- "eventmessage":(maps to string) The message of the event. This will autmatically be filled if nothing is passed in when you are sending and event with a stacktrace.
+- "user":(maps to string) User that triggered the event
+- "session":(maps to string) Session that triggered the event
+- "time":(maps to string) Time that the operation took (usually in miliseconds)
+- "url":(maps to string) URL of the page the error occurred on
+- "corrid":(maps to string) The correlation id
+- "device":(maps to string) The machine name or type you are targeting
+- "appsku":(maps to string) The SKU of your application
+- "tags":(maps to a list) A list of string tags of the event. Useful for searching or corrlating events. We suggest components or subcomponents or even logger names.
+
+You can of course leave out anything you don't need, or pass in an empty dictionary to arg_dict if you don't wish to give any data
+
+
 
 ### Option-4: Add Custom Data
 You can send custom data as part of your error event if you need to. This circumvents the python handler. Add these imports:
@@ -116,32 +140,39 @@ def main(argv=None):
     try:
         raise IndexError("Bad Math")
     except:
-        appevent = client.create_new_app_event_error("ERROR", "Index Error", "Math")
-        
-        #You can use this call to create an app event
-        #appevent = client.create_new_app_event("ERROR", "Index Error", "Math")
-        #without a stacktrace, in case you do don't have a stacktrace or you're not sending a crash.
+        appevent = client.create_new_app_event("FATAL", exc_info=True)
 
         #Populate any field with your own data, or send your own custom data
         appevent.context_app_browser = "Chrome"
-        appevent.context_app_browser_version = "57.0.2987.133"
-        appevent.custom_properties = CustomData()
-        
-        #Can support multiple string data
-        appevent.custom_properties.string_data = CustomStringData("Custom String Data 1", "Custom String Data 2")
+        appevent.context_app_browser_version = "67.x"
+
+        #Can support multiple ways to input data
+        appevent.custom_properties = CustomData("Custom Data holder!")
+        appevent.custom_properties.string_data = CustomStringData("Custom String Data 1",
+                                                                  "Custom String Data 2")
         appevent.custom_properties.string_data.custom_data3 = "More Custom Data!"
-        
-        #populate the user and session to the error event
         appevent.event_user = "john@traker.io"
         appevent.event_session = "6"
 
-        #send it to trakerr
+        appevent.context_operation_time_millis = 1000
+        appevent.context_device = "pc"
+        appevent.context_app_sku = "mobile"
+        appevent.context_tags = ["client, frontend"]
+
+        #Send it to trakerr
         client.send_event_async(appevent)
 
     return 0
 ```
 
-If you are using Django, we recommend that you look at [django user agents](https://github.com/selwin/django-user_agents) as a simple and quick way of getting the browser's name and version rather than parsing the user agent yourself. The library also allows you to use the client browser in the template, allowing you to modify the front end to the error accordingly. Please note that this library is _not maintained by Trakerr_.
+create\_new\_app\_event's full signature is as follows: 
+```python
+create_new_app_event(self, log_level="error", classification="issue", event_type="unknown",
+                     event_message="unknown", exc_info=False):
+```
+exc\_info can be set to `True` to get the latest exception traces from sys.exc\_info or simply passed in.
+
+If you are using Django, we recommend that you look at [django user agents](https://github.com/selwin/django-user_agents) as a simple and quick way of getting the browser's name and version rather than parsing the user agent yourself. The library also allows you to check the client browser in the template, allowing you to modify the front end to the error accordingly. Please note that this library is _not maintained by or related to Trakerr in any way_.
 
 ## An in-depth look at TrakerrClient's properties
 TrakerrClient's constructor initalizes the default values to all of TrakerrClient's properties.
@@ -152,18 +183,20 @@ def __init__(self, api_key, context_app_version = "1.0", context_deployment_stag
 
 The TrakerrClient class however has a lot of exposed properties. The benefit to setting these immediately after after you create the TrakerrClient is that AppEvent will default it's values against the `TrakerrClient` instance that created it. This way if there is a value that all your AppEvents uses, and the constructor default value currently doesn't suit you; it may be easier to change it in the `TrakerrClient` instance as it will become the default value for all AppEvents created after. A lot of these are populated by default value by the constructor, but you can populate them with whatever string data you want. The following table provides an in depth look at each of those.
 
+If you're populating an app event directly, you'll want to take a look at the [AppEvent properties](generated/docs/AppEvent.md) as they contain properties unique to each AppEvent which do not have defaults you may set in the client.
+
 
 Name | Type | Description | Notes
 ------------ | ------------- | -------------  | -------------
-**apiKey** | **string** | API key generated for the application | 
+**apiKey** | **string** | API key generated for the application. | 
 **contextAppVersion** | **string** | Application version information. | Default value: `1.0`
 **contextDevelopmentStage** | **string** | One of development, staging, production; or a custom string. | Default Value: `development`
 **contextEnvLanguage** | **string** | Constant string representing the language the application is in. | Default value: `python`
 **contextEnvName** | **string** | Name of the interpreter the program is run on. | Default Value: `platform.python_implementation()`
 **contextEnvVersion** | **string** | Version of python this program is running on. | Default Value: `platform.python_version()`
 **contextEnvHostname** | **string** | Hostname or ID of environment. | Default value: `platform.node()`
-**contextAppOS** | **string** | OS the application is running on. | Default value: `platform.system() + platform.release()`
-**contextAppOSVersion** | **string** | OS Version the application is running on. | Default value: `platform.version()`
+**contextAppOS** | **string** | OS the application is running on. | Default value: `platform.system() + platform.release()` on Windows, `platform.system()` on all other platforms
+**contextAppOSVersion** | **string** | OS Version the application is running on. | Default value: `platform.version()` on Windows, `platform.release()` on all other platforms
 **contextAppOSBrowser** | **string** | An optional string browser name the application is running on. | Defaults to `None`
 **contextAppOSBrowserVersion** | **string** | An optional string browser version the application is running on. | Defaults to `None`
 **contextDataCenter** | **string** | Data center the application is running on or connected to. | Defaults to `None`
@@ -175,9 +208,9 @@ You can run the following command to update an exsisting installation to the lat
 pip install git+https://github.com/trakerr-io/trakerr-python.git --upgrade
 ```
 
-You can install from a branch (Not recommended for production use):
+You can install from a branch for development or testing a new feature (Not recommended for production use):
 ```bash
-pip install git+https://github.com/trakerr-io/trakerr-python.git#<branch_name_here>
+pip install git+https://github.com/trakerr-io/trakerr-python.git@<branch_name_here>
 ```
 
 ## Documentation For Models

@@ -16,18 +16,24 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+    ------------------------------------------------------------------------------
+    psutils is licensed under the BSD 2-0. For more information please see their licencing information:
+    https://github.com/giampaolo/psutil/blob/master/LICENSE.
 """
 
 import platform
 import pprint
 import sys
-from datetime import datetime
+import re
 
+import psutil
+from datetime import datetime
 from six import *
+
 # might want to clean up imports?
 from trakerr_client import ApiClient, Configuration
 from trakerr_client.apis import EventsApi
-from trakerr_client.models import *
+from trakerr_client.models import AppEvent
 
 from trakerr.event_trace_builder import EventTraceBuilder
 from trakerr.trakerr_utils import TrakerrUtils
@@ -52,22 +58,30 @@ class TrakerrClient(object):
     # context_appbrowser_version
     # context_datacenter
     # context_datacenter_region
+    # context_application_sku
+    # context_tags
 
     EPOCH_CONSTANT = datetime(1970, 1, 1)
 
-    def __init__(self, api_key, context_app_version="1.0", context_deployment_stage="development"):
+    def __init__(self, api_key, context_app_version="1.0",
+                 context_deployment_stage="development", application_sku="", tags=[]):
         """
         Initializes the TrakerrClient class and default values for it's properties.
+        :param api_key: The API key for your application on trakerr to send events back to.
         :param context_env_name: The string name of the enviroment the code is running on.
         :param context_deployment_stage: The string version of the enviroment
          the code is running on.
+        :param application_sku: Optional string application SKU.
+        :param tags: Optional list of string tags on the module
+         or part of project you are logging events on.
+         It is recommended at least giving giving the module and the submodule as tags.
+         IE: ["mysql", "payment"]
         """
 
         if (not isinstance(api_key, string_types)
-                or (not isinstance(context_app_version, string_types)
-                    and context_app_version is not None)
-                or (not isinstance(context_deployment_stage, string_types)
-                    and context_deployment_stage is not None)):
+                or not isinstance(context_app_version, string_types)
+                or not isinstance(context_deployment_stage, string_types)
+                or not isinstance(application_sku, string_types)):
             raise TypeError("Arguments are expected strings")
 
         # pep8 linters wants you to init the private variable (which is good practice in python)
@@ -77,34 +91,48 @@ class TrakerrClient(object):
         self._api_key = self.api_key = api_key
         self._context_app_version = self.context_app_version = context_app_version
         self._context_deployment_stage = self.context_deployment_stage = context_deployment_stage
+        self._context_application_sku = self.context_application_sku = application_sku
         self._context_env_language = self.context_env_language = "Python"
         self._context_env_name = self.context_env_name = platform.python_implementation()
         self._context_env_version = self.context_env_version = platform.python_version()
         self._context_env_hostname = self.context_env_hostname = platform.node()
-        # Join is supposed to be faster than + operator
-        self._context_appos = self.context_appos = seq.join(
-            (platform.system(), platform.release()))
-        self._context_appos_version = self.context_appos_version = platform.version()
-        self._context_appbrowser = self.context_appbrowser = None  # find default
-        self._context_appbrowser_version = self.context_appbrowser_version = None  # find default
+
+
+        if re.search('windows', platform.system().lower()) is not None:
+            # Join is supposed to be faster than + operator
+            self._context_appos = self.context_appos = seq.join(
+                (platform.system(), platform.release()))
+            self._context_appos_version = self.context_appos_version = platform.version()
+        else:
+            self._context_appos = self.context_appos = platform.system()
+            self._context_appos_version = self.context_appos_version = platform.release()
+
+        self._context_appbrowser = self.context_appbrowser = None
+        self._context_appbrowser_version = self.context_appbrowser_version = None
         self._context_datacenter = self.context_datacenter = None
         self._context_datacenter_region = self.context_datacenter_region = None
 
         self._events_api = EventsApi(ApiClient(Configuration().host))
         # Should get the default url. Also try Configuration().host
 
+        try:
+            self._context_tags = self.context_tags = list(tags)
+        except TypeError:
+            pprint.pprint("tags are unable to be processed into a list object. \
+                           Please us a list or a list like structure.", sys.stderr)
+
     def create_new_app_event(self, log_level="error", classification="issue", event_type="unknown",
                              event_message="unknown", exc_info=False):
         """
         Creates a new AppEvent instance.
-        :param log_level: Strng representation on the level of the Error.
-         Can be 'debug','info','warning','error', 'fatal', defaults to 'error'.
+        :param log_level: Strng representation on the level of the error.
+        Can be 'debug','info','warning','error', 'fatal', defaults to 'error'.
         :param classification: Optional extra string descriptor to clarify the error.
         :param event_type: String representation of the type of error.
         :param event_message: String message of the error.
         :param exc_info: The exc_info tuple to parse the stacktrace from.
-         Pass None to generate one from the current error stack;
-         pass false to skip parsing the stacktrace.
+        Pass None to generate one from the current error stack;
+        pass false to skip parsing the stacktrace.
         :return: AppEvent instance with exc_info parsed depending on the above flags.
         """
         try:
@@ -192,11 +220,15 @@ class TrakerrClient(object):
         Allows the caller to pass in user and session as added information to log,
         to file the error under.
         :param arg_dict: Dictionary with any of these key value pairs assigned to a string:
-        errname, errmessage, user, session. You can leave any pair out that you don't need.
-        To construct with pure default values,pass in an empty dictionary.
-        If you are getting the Stacktrace errname and message will be filled with
-        the values from Stacktrace. Otherwise, both errname and errmessage will be unknown.
-        :param log_level: String representation on the level of the Error.
+        eventtype, eventmessage, user, session, time for operation time in milis,
+        url if it is a web app, corrid for the correlation id, appsku which is the SKU of your application
+        tags A list of string tags of the event and device for the machine name (samsung s7).
+        You can leave any pair out that you don't need.
+        To construct with pure default values, pass in an empty dictionary.
+        If you are passing an event with a Stacktrace errname
+        and message will be filled with the values from Stacktrace.
+        Otherwise, both errname and errmessage will be unknown.
+        :param log_level: String representation on the level of the error.
         Can be 'debug', 'info', 'warning', 'error', 'fatal', defaults to 'error'.
         :param classification: Optional extra string descriptor to clarify the error.
         (IE: log_level is fatal and classification may be 'hard lock' or 'Network error')
@@ -206,10 +238,16 @@ class TrakerrClient(object):
         """
         excevent = self.create_new_app_event(log_level,
                                              classification, arg_dict.get(
-                                                 'errname'),
-                                             arg_dict.get('errmessage'), exc_info)
+                                                 'eventtype'),
+                                             arg_dict.get('eventmessage'), exc_info)
         excevent.event_user = arg_dict.get('user')
         excevent.event_session = arg_dict.get('session')
+        excevent.context_operation_time_millis = arg_dict.get('time')
+        excevent.context_url = arg_dict.get('url')
+        excevent.context_cross_app_correlation_id = arg_dict.get('corrid')
+        excevent.context_device = arg_dict.get('device')
+        excevent.context_app_sku = arg_dict.get('appsku')
+        excevent.context_tags = arg_dict.get('tags', [])
         self.send_event_async(excevent)
 
     def fill_defaults(self, app_event):
@@ -256,11 +294,18 @@ class TrakerrClient(object):
         if app_event.context_data_center_region is None:
             app_event.context_data_center_region = self.context_datacenter_region
 
-        tdo = datetime.utcnow() - self.EPOCH_CONSTANT  # timedelta object
+        tdo = datetime.utcnow() - self.EPOCH_CONSTANT  #timedelta object
         if app_event.event_time is None:
             app_event.event_time = int(tdo.total_seconds() * 1000)
 
-    # getters and setters
+        if app_event.context_cpu_percentage is None:
+            app_event.context_cpu_percentage = psutil.cpu_percent(interval=1)
+        if app_event.context_memory_percentage is None:
+            mem = psutil.virtual_memory()
+            app_event.context_memory_percentage = mem.percent
+
+
+    #getters and setters
     @property
     def api_key(self):
         """api_key property"""
@@ -419,7 +464,7 @@ class TrakerrClient(object):
 
     @property
     def context_env_language(self):
-        """context_deployment_stage property"""
+        """context_env_language property"""
         return self._context_env_language
 
     @context_env_language.setter
@@ -429,6 +474,20 @@ class TrakerrClient(object):
     @context_env_language.deleter
     def context_env_language(self):
         del self._context_env_language
+
+    @property
+    def context_tags(self):
+        """context_tags property"""
+        return self._context_tags
+
+    @context_tags.setter
+    def context_tags(self, value):
+        self._context_tags = value
+
+    @context_tags.deleter
+    def context_tags(self):
+        del self._context_tags
+
 
 
 def async_callback(response):

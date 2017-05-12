@@ -5,7 +5,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **api_key** | **str** | API key generated for the application | 
 **log_level** | **str** | (optional) Logging level, one of &#39;debug&#39;,&#39;info&#39;,&#39;warning&#39;,&#39;error&#39;, &#39;fatal&#39;, defaults to &#39;error&#39; | [optional] 
-**classification** | **str** | (optional) one of &#39;error&#39; or a custom string for non-errors, defaults to &#39;error&#39; | 
+**classification** | **str** | (optional) one of &#39;issue&#39; or a custom string for non-issues, defaults to &#39;issue&#39; | 
 **event_type** | **str** | type of the event or error (eg. NullPointerException) | 
 **event_message** | **str** | message containing details of the event or error | 
 **event_time** | **int** | (optional) event time in ms since epoch | [optional] 
@@ -24,6 +24,14 @@ Name | Type | Description | Notes
 **context_app_os_version** | **str** | (optional) OS version the application is running on | [optional] 
 **context_data_center** | **str** | (optional) Data center the application is running on or connected to | [optional] 
 **context_data_center_region** | **str** | (optional) Data center region | [optional] 
+**context_tags** | **list[str]** |  | [optional] 
+**context_url** | **str** | (optional) The full URL when running in a browser when the event was generated. | [optional] 
+**context_operation_time_millis** | **int** | (optional) duration that this event took to occur in millis. Example - database call time in millis. | [optional] 
+**context_cpu_percentage** | **int** | (optional) CPU utilization as a percent when event occured | [optional] 
+**context_memory_percentage** | **int** | (optional) Memory utilization as a percent when event occured | [optional] 
+**context_cross_app_correlation_id** | **str** | (optional) Cross application correlation ID | [optional] 
+**context_device** | **str** | (optional) Device information | [optional] 
+**context_app_sku** | **str** | (optional) Application SKU | [optional] 
 **custom_properties** | [**CustomData**](CustomData.md) |  | [optional] 
 **custom_segments** | [**CustomData**](CustomData.md) |  | [optional] 
 
