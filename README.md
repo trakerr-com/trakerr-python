@@ -11,9 +11,9 @@ If you're already using the python logger in some capacity, you can integrate wi
 
 To install from master, simply use:
 ```bash
-pip install git+https://github.com/trakerr-io/trakerr-python.git
+pip install git+https://github.com/trakerr-com/trakerr-python.git
 ```
-(you may need to run `pip` with root permission: `sudo -H pip install git+https://github.com/trakerr-io/trakerr-python.git`)
+(you may need to run `pip` with root permission: `sudo -H pip install git+https://github.com/trakerr-com/trakerr-python.git`)
 
 or upgrade an installation with a command from the [advanced pip commands](#Advanced-pip-install-commands-for-Trakerr) section.
 
@@ -205,17 +205,17 @@ Name | Type | Description | Notes
 ## Advanced pip install commands for Trakerr
 You can run the following command to update an exsisting installation to the latest commit on master:
 ```bash
-pip install git+https://github.com/trakerr-io/trakerr-python.git --upgrade
+pip install git+https://github.com/trakerr-com/trakerr-python.git --upgrade
 ```
 
 You can install from a branch for development or testing a new feature (Not recommended for production use):
 ```bash
-pip install git+https://github.com/trakerr-io/trakerr-python.git@<branch_name_here>
+pip install git+https://github.com/trakerr-com/trakerr-python.git@<branch_name_here>
 ```
 
 ## Documentation For Models
 
- - [AppEvent](https://github.com/trakerr-io/trakerr-python/blob/master/generated/docs/AppEvent.md)
+ - [AppEvent](https://github.com/trakerr-com/trakerr-python/blob/master/generated/docs/AppEvent.md)
 
 ## Author
 [RM](https://github.com/RMSD)
