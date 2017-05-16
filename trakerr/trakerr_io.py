@@ -115,6 +115,8 @@ class TrakerrClient(object):
         self._events_api = EventsApi(ApiClient(Configuration().host))
         # Should get the default url. Also try Configuration().host
 
+        psutil.cpu_percent()
+
         try:
             self._context_tags = self.context_tags = list(tags)
         except TypeError:
@@ -221,8 +223,8 @@ class TrakerrClient(object):
         to file the error under.
         :param arg_dict: Dictionary with any of these key value pairs assigned to a string:
         eventtype, eventmessage, user, session, time for operation time in milis,
-        url if it is a web app, corrid for the correlation id, appsku which is the SKU of your application
-        tags A list of string tags of the event and device for the machine name (samsung s7).
+        url if it is a web app, corrid for the correlation id,
+        and device for the machine name (samsung s7).
         You can leave any pair out that you don't need.
         To construct with pure default values, pass in an empty dictionary.
         If you are passing an event with a Stacktrace errname
@@ -246,8 +248,6 @@ class TrakerrClient(object):
         excevent.context_url = arg_dict.get('url')
         excevent.context_cross_app_correlation_id = arg_dict.get('corrid')
         excevent.context_device = arg_dict.get('device')
-        excevent.context_app_sku = arg_dict.get('appsku')
-        excevent.context_tags = arg_dict.get('tags', [])
         self.send_event_async(excevent)
 
     def fill_defaults(self, app_event):
@@ -299,10 +299,16 @@ class TrakerrClient(object):
             app_event.event_time = int(tdo.total_seconds() * 1000)
 
         if app_event.context_cpu_percentage is None:
-            app_event.context_cpu_percentage = psutil.cpu_percent(interval=1)
+            app_event.context_cpu_percentage = psutil.cpu_percent()
         if app_event.context_memory_percentage is None:
             mem = psutil.virtual_memory()
             app_event.context_memory_percentage = mem.percent
+
+        if app_event.context_tags is None:
+            app_event.context_tags = self.context_tags
+
+        if app_event.context_app_sku is None:
+            app_event.context_app_sku = self.context_app_version
 
 
     #getters and setters

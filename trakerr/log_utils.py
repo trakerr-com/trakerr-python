@@ -1,4 +1,6 @@
-﻿"""
+﻿# coding: utf-8
+
+"""
     Trakerr Client API
 
     Get your application events and errors to Trakerr via the *Trakerr API*.

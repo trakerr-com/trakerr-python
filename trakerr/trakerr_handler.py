@@ -1,4 +1,22 @@
-﻿
+﻿# coding: utf-8
+
+"""
+    trakerr Client API
+
+    Get your application events and errors to trakerr via the *trakerr API*.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+"""
 import logging
 from trakerr.trakerr_io import TrakerrClient
 
@@ -35,12 +53,14 @@ class TrakerrHandler(logging.Handler):
         :param record: Record object returned by the super handler.
         """
         classification = "issue"
-        args = {'eventmessage':record.getMessage(), 'tags':[record.name]}
+        args = {'eventmessage':record.getMessage()}
         info = record.exc_info
         #Check if record actually has a stacktrace.
         if info is None or info.count(None) == len(info):
             info = False
             args['eventtype'] = record.name
+        if record.name not in self.trakerr_client.context_tags:
+            self.trakerr_client.context_tags.append(record.name)
         if (record.levelname.lower() == "debug") or (record.levelname.lower() == "info"):
             classification = "log"
         self.trakerr_client.log(args, record.levelname.lower(), classification, exc_info=info)

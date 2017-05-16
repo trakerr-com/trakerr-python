@@ -113,8 +113,6 @@ arg\_dict is a dictionary which makes it simple to pass in basic AppEvent inform
 - "url":(maps to string) URL of the page the error occurred on
 - "corrid":(maps to string) The correlation id
 - "device":(maps to string) The machine name or type you are targeting
-- "appsku":(maps to string) The SKU of your application
-- "tags":(maps to a list) A list of string tags of the event. Useful for searching or corrlating events. We suggest components or subcomponents or even logger names.
 
 You can of course leave out anything you don't need, or pass in an empty dictionary to arg_dict if you don't wish to give any data
 
