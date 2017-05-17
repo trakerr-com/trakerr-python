@@ -74,8 +74,8 @@ class ApiClient(object):
     :param header_name: a header to pass when making calls to the API.
     :param header_value: a header value to pass when making calls to the API.
     """
-    def __init__(self, host=None, header_name=None, header_value=None, cookie=None):
 
+    def __init__(self, host=None, header_name=None, header_value=None, cookie=None, threads=4):
         """
         Constructor of the class.
         """
@@ -90,6 +90,14 @@ class ApiClient(object):
         self.cookie = cookie
         # Set default User-Agent.
         self.user_agent = 'Swagger-Codegen/1.0.0/python'
+
+        self._thread_pool = None
+        try:
+            from concurrent.futures import ThreadPoolExecutor
+
+            self._thread_pool = ThreadPoolExecutor(max_workers=threads)
+        except ImportError:
+            pass
 
     @property
     def user_agent(self):
@@ -165,12 +173,12 @@ class ApiClient(object):
             deserialized_data = None
 
         if callback:
-            callback(deserialized_data) if _return_http_data_only else callback((deserialized_data, response_data.status, response_data.getheaders()))
+            callback(deserialized_data) if _return_http_data_only else callback(
+                (deserialized_data, response_data.status, response_data.getheaders()))
         elif _return_http_data_only:
-            return ( deserialized_data );
+            return (deserialized_data)
         else:
             return (deserialized_data, response_data.status, response_data.getheaders())
-        
 
     def to_path_value(self, obj):
         """
@@ -321,17 +329,29 @@ class ApiClient(object):
             the request will be called asynchronously.
         :param _return_http_data_only: response data without head status code and headers
         :return:
-            If provide parameter callback,
+            If provide parameter callback and is python 2.x,
             the request will be called asynchronously.
             The method will return the request thread.
+            If provide parameter callback and is python 3.x,
+            the request will be called asynchronously.
+            The method will return the future object from the connection pool.
             If parameter callback is None,
             then the method will return the response directly.
         """
+        thread = None
         if callback is None:
             return self.__call_api(resource_path, method,
                                    path_params, query_params, header_params,
                                    body, post_params, files,
                                    response_type, auth_settings, callback, _return_http_data_only)
+        elif self._thread_pool is not None:
+            complete = self._thread_pool.submit(self.__call_api, resource_path, method,
+                                                path_params, query_params, header_params,
+                                                body, post_params, files,
+                                                response_type, auth_settings, callback,
+                                                _return_http_data_only)
+            print("Python 3")
+            return complete
         else:
             thread = threading.Thread(target=self.__call_api,
                                       args=(resource_path, method,
@@ -339,9 +359,10 @@ class ApiClient(object):
                                             header_params, body,
                                             post_params, files,
                                             response_type, auth_settings,
-                                            callback,_return_http_data_only))
-        thread.start()
-        return thread
+                                            callback, _return_http_data_only))
+            print("Python 2")
+            thread.start()
+            return thread
 
     def request(self, method, url, query_params=None, headers=None,
                 post_params=None, body=None):
@@ -414,8 +435,10 @@ class ApiClient(object):
                         filename = os.path.basename(f.name)
                         filedata = f.read()
                         mimetype = mimetypes.\
-                            guess_type(filename)[0] or 'application/octet-stream'
-                        params.append(tuple([k, tuple([filename, filedata, mimetype])]))
+                            guess_type(filename)[
+                                0] or 'application/octet-stream'
+                        params.append(
+                            tuple([k, tuple([filename, filedata, mimetype])]))
 
         return params
 

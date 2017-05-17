@@ -108,7 +108,8 @@ class RESTClientObject(object):
             cert_reqs=cert_reqs,
             ca_certs=ca_certs,
             cert_file=cert_file,
-            key_file=key_file
+            key_file=key_file,
+            block=True
         )
 
     def request(self, method, url, query_params=None, headers=None,
