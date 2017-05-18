@@ -33,7 +33,10 @@ logger = logging.getLogger("Logger name")
 #Instantiate Trakerr's logger handler. By default the handler will only log WARNING and above.
 th = TrakerrHandler("<api-key>", "App Version number here", "Deployment stage here")
 
-#Attach our handler to your logger.
+#Attach our handler to the root logger.
+logging.getLogger('').addHandler(th)
+
+#Alternatively attach our handler to your logger for a single logger instance.
 logger.addHandler(th)
 ```
 The handler's full constructor signature is as follows:
