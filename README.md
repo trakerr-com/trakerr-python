@@ -183,7 +183,7 @@ def __init__(self, api_key, context_app_version="1.0",
              context_deployment_stage="development", application_sku="", tags=[],
              threads=4, connnections=4):
 ```
-The threads parameter specify the number of threads in the thread pool. This only matters if you are using async call in python 3.2+. The connections parameter specificies the number of connections in the connection pool. If there are more threads than connections, the connection pool will block the async calls until it can serve a connection.
+The threads parameter specify the number of `max_workers` in the thread pool. This only matters if you are using `send_event_async` in python 3.2+. The connections parameter specificies the number of connections in the connection pool. If there are more threads than connections, the connection pool will block the derivitive async calls until it can serve a connection.
 
 The TrakerrClient class however has a lot of exposed properties. The benefit to setting these immediately after after you create the TrakerrClient is that AppEvent will default it's values with the `TrakerrClient` instance that created it.
 This way if there is a value that all your AppEvents uses, and the constructor default value currently doesn't suit you; it may be easier to change it in the `TrakerrClient` instance as it will become the default value for all AppEvents created after. A lot of these are populated by default value by the constructor, but you can populate them with whatever string data you want. The following table provides an in depth look at each of those.
