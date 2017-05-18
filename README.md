@@ -33,7 +33,10 @@ logger = logging.getLogger("Logger name")
 #Instantiate Trakerr's logger handler. By default the handler will only log WARNING and above.
 th = TrakerrHandler("<api-key>", "App Version number here", "Deployment stage here")
 
-#Attach our handler to your logger.
+#Attach our handler to the root logger.
+logging.getLogger('').addHandler(th)
+
+#Alternatively attach our handler to your logger for a single logger instance.
 logger.addHandler(th)
 ```
 The handler's full constructor signature is as follows:
@@ -176,29 +179,35 @@ If you are using Django, we recommend that you look at [django user agents](http
 TrakerrClient's constructor initalizes the default values to all of TrakerrClient's properties.
 
 ```python
-def __init__(self, api_key, context_app_version = "1.0", context_deployment_stage =  "development"):
+def __init__(self, api_key, context_app_version="1.0",
+             context_deployment_stage="development", application_sku="", tags=[],
+             threads=4, connnections=4):
 ```
+The threads parameter specify the number of threads in the thread pool. This only matters if you are using async call in python 3.2+. The connections parameter specificies the number of connections in the connection pool. If there are more threads than connections, the connection pool will block the async calls until it can serve a connection.
 
-The TrakerrClient class however has a lot of exposed properties. The benefit to setting these immediately after after you create the TrakerrClient is that AppEvent will default it's values against the `TrakerrClient` instance that created it. This way if there is a value that all your AppEvents uses, and the constructor default value currently doesn't suit you; it may be easier to change it in the `TrakerrClient` instance as it will become the default value for all AppEvents created after. A lot of these are populated by default value by the constructor, but you can populate them with whatever string data you want. The following table provides an in depth look at each of those.
+The TrakerrClient class however has a lot of exposed properties. The benefit to setting these immediately after after you create the TrakerrClient is that AppEvent will default it's values with the `TrakerrClient` instance that created it.
+This way if there is a value that all your AppEvents uses, and the constructor default value currently doesn't suit you; it may be easier to change it in the `TrakerrClient` instance as it will become the default value for all AppEvents created after. A lot of these are populated by default value by the constructor, but you can populate them with whatever string data you want. The following table provides an in depth look at each of those.
 
 If you're populating an app event directly, you'll want to take a look at the [AppEvent properties](generated/docs/AppEvent.md) as they contain properties unique to each AppEvent which do not have defaults you may set in the client.
 
 
 Name | Type | Description | Notes
 ------------ | ------------- | -------------  | -------------
-**apiKey** | **string** | API key generated for the application. | 
-**contextAppVersion** | **string** | Application version information. | Default value: `1.0`
-**contextDevelopmentStage** | **string** | One of development, staging, production; or a custom string. | Default Value: `development`
-**contextEnvLanguage** | **string** | Constant string representing the language the application is in. | Default value: `python`
-**contextEnvName** | **string** | Name of the interpreter the program is run on. | Default Value: `platform.python_implementation()`
-**contextEnvVersion** | **string** | Version of python this program is running on. | Default Value: `platform.python_version()`
-**contextEnvHostname** | **string** | Hostname or ID of environment. | Default value: `platform.node()`
-**contextAppOS** | **string** | OS the application is running on. | Default value: `platform.system() + platform.release()` on Windows, `platform.system()` on all other platforms
-**contextAppOSVersion** | **string** | OS Version the application is running on. | Default value: `platform.version()` on Windows, `platform.release()` on all other platforms
-**contextAppOSBrowser** | **string** | An optional string browser name the application is running on. | Defaults to `None`
-**contextAppOSBrowserVersion** | **string** | An optional string browser version the application is running on. | Defaults to `None`
-**contextDataCenter** | **string** | Data center the application is running on or connected to. | Defaults to `None`
-**contextDataCenterRegion** | **string** | Data center region. | Defaults to `None`
+**api_key** | **string** | API key generated for the application. | 
+**context_app\_version** | **string** | Application version information. | Default value: `1.0`
+**context\_development\_stage** | **string** | One of development, staging, production; or a custom string. | Default Value: `development`
+**context\_env\_anguage** | **string** | Constant string representing the language the application is in. | Default value: `python`
+**context\_env\_name** | **string** | Name of the interpreter the program is run on. | Default Value: `platform.python_implementation()`
+**context\_env\_version** | **string** | Version of python this program is running on. | Default Value: `platform.python_version()`
+**context\_env\_hostname** | **string** | Hostname or ID of environment. | Default value: `platform.node()`
+**context\_app\_os** | **string** | OS the application is running on. | Default value: `platform.system() + platform.release()` on Windows, `platform.system()` on all other platforms
+**context\_appos\_version** | **string** | OS Version the application is running on. | Default value: `platform.version()` on Windows, `platform.release()` on all other platforms
+**context\_appbrowser** | **string** | An optional string browser name the application is running on. | Defaults to `None`
+**context\_appbrowser\_version** | **string** | An optional string browser version the application is running on. | Defaults to `None`
+**context\_data\_center** | **string** | Data center the application is running on or connected to. | Defaults to `None`
+**context\_data\_center\_region** | **string** | Data center region. | Defaults to `None`
+**context\_app\_sku** | **str** | (optional) Application SKU | Defaults to `None`
+**context_tags** | **str** | (optional) Application SKU | Defaults to `[]`
 
 ## Advanced pip install commands for Trakerr
 You can run the following command to update an exsisting installation to the latest commit on master:
