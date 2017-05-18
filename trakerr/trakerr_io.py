@@ -65,7 +65,7 @@ class TrakerrClient(object):
 
     def __init__(self, api_key, context_app_version="1.0",
                  context_deployment_stage="development", application_sku="", tags=[],
-                 threads=4, connection=4):
+                 threads=4, connnections=4):
         """
         Initializes the TrakerrClient class and default values for it's properties.
         :param api_key: The API key for your application on trakerr to send events back to.
@@ -118,7 +118,7 @@ class TrakerrClient(object):
         self._context_datacenter = self.context_datacenter = None
         self._context_datacenter_region = self.context_datacenter_region = None
 
-        self._events_api = EventsApi(ApiClient(Configuration().host, threads=threads, connection=connection))
+        self._events_api = EventsApi(ApiClient(Configuration().host, threads=threads, connnections=connnections))
         # Should get the default url. Also try Configuration().host
 
         psutil.cpu_percent()
