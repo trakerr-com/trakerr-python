@@ -73,13 +73,17 @@ class ApiClient(object):
     :param host: The base path for the server to call.
     :param header_name: a header to pass when making calls to the API.
     :param header_value: a header value to pass when making calls to the API.
+    :param cookie: Any storage in cookies.
+    :param threads: Number of threads in the connection pool.
+    :param connections: Number of connections in the connection pool.
     """
 
-    def __init__(self, host=None, header_name=None, header_value=None, cookie=None, threads=4):
+    def __init__(self, host=None, header_name=None, header_value=None,
+                 cookie=None, threads=4, connnections=4):
         """
         Constructor of the class.
         """
-        self.rest_client = RESTClientObject()
+        self.rest_client = RESTClientObject(connnections)
         self.default_headers = {}
         if header_name is not None:
             self.default_headers[header_name] = header_value
@@ -350,7 +354,6 @@ class ApiClient(object):
                                                 body, post_params, files,
                                                 response_type, auth_settings, callback,
                                                 _return_http_data_only)
-            print("Python 3")
             return complete
         else:
             thread = threading.Thread(target=self.__call_api,
@@ -360,7 +363,6 @@ class ApiClient(object):
                                             post_params, files,
                                             response_type, auth_settings,
                                             callback, _return_http_data_only))
-            print("Python 2")
             thread.start()
             return thread
 

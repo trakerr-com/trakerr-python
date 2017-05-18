@@ -64,7 +64,8 @@ class TrakerrClient(object):
     EPOCH_CONSTANT = datetime(1970, 1, 1)
 
     def __init__(self, api_key, context_app_version="1.0",
-                 context_deployment_stage="development", application_sku="", tags=[]):
+                 context_deployment_stage="development", application_sku="", tags=[],
+                 threads=4, connection=4):
         """
         Initializes the TrakerrClient class and default values for it's properties.
         :param api_key: The API key for your application on trakerr to send events back to.
@@ -76,6 +77,11 @@ class TrakerrClient(object):
          or part of project you are logging events on.
          It is recommended at least giving giving the module and the submodule as tags.
          IE: ["mysql", "payment"]
+        :param threads: Number of threads in the thread pool.
+         This only matters if you are using async call in python 3.2+.
+        :param connection: Number of connections in the connection pool.
+         If there are more threads than connections,
+         the connection pool will block those calls until it can serve a connection.
         """
 
         if (not isinstance(api_key, string_types)
@@ -112,7 +118,7 @@ class TrakerrClient(object):
         self._context_datacenter = self.context_datacenter = None
         self._context_datacenter_region = self.context_datacenter_region = None
 
-        self._events_api = EventsApi(ApiClient(Configuration().host))
+        self._events_api = EventsApi(ApiClient(Configuration().host, threads=threads, connection=connection))
         # Should get the default url. Also try Configuration().host
 
         psutil.cpu_percent()
