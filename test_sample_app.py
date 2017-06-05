@@ -66,6 +66,7 @@ def main(argv=None):
     except:
         logger2.warning("Bad math.", exc_info=True)
 
+    time.sleep(3)
     for i in range(1, 100):
         logger2.info("Hi there. [" + str(i) + "]")
 

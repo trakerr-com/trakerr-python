@@ -49,21 +49,25 @@ class _PerfCounter(threading.Thread):
         self._cpu_percent = 0
         self._mem_percent = 0
         self._shutdown = False
+        self._lock = threading.Lock()
         psutil.cpu_percent()
         psutil.virtual_memory()
 
     def run(self):
         while not self._shutdown:
             time.sleep(1)
-            self._cpu_percent = psutil.cpu_percent()
             mem = psutil.virtual_memory()
-            self._mem_percent = mem.percent
+            with self._lock:
+                self._cpu_percent = psutil.cpu_percent()
+                self._mem_percent = mem.percent
 
     def stop(self):
         self._shutdown = True
 
     def get_cpu_percent(self):
-        return self._cpu_percent
+        with self._lock:
+            return self._cpu_percent
 
     def get_mem_percent(self):
-        return self._mem_percent
+        with self._lock:
+            return self._mem_percent
