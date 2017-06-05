@@ -53,6 +53,14 @@ The parameters are as follows
 
 You should be able to now send basic events and information to trakerr. If you are only using trakerr to log, or want to send more in depth events, read on below.
 
+## TrakerrClient Shutdown
+When cleaning up your application, or implementing a shutdown, be sure to call:
+```python
+TrakerrClient.shutdown()
+```
+
+This will close the perfomange monitoring thread gracefully. You only need to call this once, no matter how many loggers you have. Add it to any cleanup function you have for your program.
+
 ## Detailed Integration Guide
 By using the pip command above, you can also use trakerr in a multitude of different ways.
 

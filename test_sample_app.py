@@ -16,7 +16,7 @@
     limitations under the License.
 """
 
-
+import time
 import sys
 #With handler, creating the logger seperately.
 import logging
@@ -45,6 +45,8 @@ def main(argv=None):
     if len(argv) > 1:
         api_key = argv[1]
 
+    time.sleep(1)
+
     #Built in python handler
     logger = Trakerr.get_logger(api_key, "1.0", "newlogger")
     try:
@@ -64,9 +66,11 @@ def main(argv=None):
     except:
         logger2.warning("Bad math.", exc_info=True)
 
-    logger2.info("Hi there.")
+    time.sleep(3)
+    for i in range(1, 100):
+        logger2.info("Hi there. [" + str(i) + "]")
 
-
+    time.sleep(3)
     client = TrakerrClient(api_key, "1.0", "development")
 
     #Sending an error(or non-error) quickly without using the logger
@@ -98,6 +102,14 @@ def main(argv=None):
 
         #Send it to trakerr
         client.send_event_async(appevent)
+
+    TrakerrClient.shutdown()
+    print "Done?"
+    try:
+        raw_input()# doesn't work on python 3, think about how to fix
+    except (EOFError, SyntaxError) as e:
+        pass
+
 
     return 0
 
