@@ -37,6 +37,7 @@ from trakerr_client.models import AppEvent
 
 from trakerr.event_trace_builder import EventTraceBuilder
 from trakerr.trakerr_utils import TrakerrUtils
+from trakerr.perf_utils import PerfUtils
 
 
 class TrakerrClient(object):
@@ -44,7 +45,9 @@ class TrakerrClient(object):
     An object which controls creating and sending AppEvents.
     """
 
-    # Class variables and properties
+    _comp_info = PerfUtils.instance()
+
+    # instance variables and properties
     # event_api
 
     # api_key
@@ -120,8 +123,9 @@ class TrakerrClient(object):
 
         self._events_api = EventsApi(ApiClient(Configuration().host, threads=threads, connnections=connnections))
         # Should get the default url. Also try Configuration().host
+        self._comp_info = PerfUtils.instance()
 
-        psutil.cpu_percent()
+        #psutil.cpu_percent()
 
         try:
             self._context_tags = self.context_tags = list(tags)
@@ -305,16 +309,19 @@ class TrakerrClient(object):
             app_event.event_time = int(tdo.total_seconds() * 1000)
 
         if app_event.context_cpu_percentage is None:
-            app_event.context_cpu_percentage = psutil.cpu_percent()
+            app_event.context_cpu_percentage = self._comp_info.get_cpu_percent()
         if app_event.context_memory_percentage is None:
-            mem = psutil.virtual_memory()
-            app_event.context_memory_percentage = mem.percent
+            app_event.context_memory_percentage = self._comp_info.get_mem_percent()
 
         if app_event.context_tags is None:
             app_event.context_tags = self.context_tags
 
         if app_event.context_app_sku is None:
             app_event.context_app_sku = self.context_app_version
+
+    @classmethod
+    def shutdown(cls):
+        TrakerrClient._comp_info.shutdown()
 
 
     #getters and setters
