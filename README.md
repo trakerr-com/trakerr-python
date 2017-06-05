@@ -39,6 +39,8 @@ logging.getLogger('').addHandler(th)
 #Alternatively attach our handler to your logger for a single logger instance.
 logger.addHandler(th)
 ```
+Follow the [shuddown section](#TrakerrClient-Shutdown) when you are closing your app to ensure a graceful shutdown.
+
 The handler's full constructor signature is as follows:
 ```python
 def __init__(self, api_key=None, app_version="1.0", context_deployment_stage="deployment",

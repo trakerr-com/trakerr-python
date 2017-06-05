@@ -104,7 +104,7 @@ def main(argv=None):
         client.send_event_async(appevent)
 
     TrakerrClient.shutdown()
-    print "Done?"
+    print("Done?")
     try:
         raw_input()# doesn't work on python 3, think about how to fix
     except (EOFError, SyntaxError) as e:
