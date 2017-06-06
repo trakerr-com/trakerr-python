@@ -3,6 +3,13 @@ python:
   - "2.7.9"
   - "3.4"
 # command to install dependencies
-install: "pip install -r requirements.txt"
+# Make sure to change the branch name if you're not making a PR off the develop branch.
+install: 
+  - "pip install -r requirements.txt"
+  - pip install git+https://github.com/trakerr-com/trakerr-python.git@develop
 # command to run tests
 script: python test/test_send_event.py
+
+notifications:
+  email: false
+  #Add slack notifications instead when slack comes back up.
