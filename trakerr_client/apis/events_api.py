@@ -75,8 +75,8 @@ class EventsApi(object):
         if kwargs.get('callback'):
             return self.events_post_with_http_info(data, **kwargs)
         else:
-            return self.events_post_with_http_info(data, **kwargs)
-            #return data
+            data, response = self.events_post_with_http_info(data, **kwargs)
+            return (data, response)
 
     def events_post_with_http_info(self, data, **kwargs):
         """
