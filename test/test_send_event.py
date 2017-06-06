@@ -34,7 +34,7 @@ class TestStackTraceLine(unittest.TestCase):
     """ StackTraceLine unit test stubs """
 
     def setUp(self):
-        self.logger = Trakerr.get_logger("898152e031aadc285c3d84aeeb3c1e386735434729425", "Python", "newlogger")
+        self.client = TrakerrClient("898152e031aadc285c3d84aeeb3c1e386735434729425", "Python", "newlogger")
 
     def tearDown(self):
         TrakerrClient.shutdown()
@@ -46,18 +46,30 @@ class TestStackTraceLine(unittest.TestCase):
         time.sleep(3)
 
         #Built in python handler
+        #Sending an error(or non-error) with custom data without the logger
         try:
-            raise ArithmeticError("Exception")
+            raise IndexError("Index out of bounds.")
         except:
-            self.logger.exception("Corrupt file.")
+            appevent = self.client.create_new_app_event("FATAL", exc_info=True)
 
-def callback(response):
-    """
-    Callback method for the send_event_async function. Currently outputs nothing.
-    :param response: message returned after the async call is completed.
-    """
-    pass
+            #Populate any field with your own data, or send your own custom data
+            appevent.context_app_browser = "Chrome"
+            appevent.context_app_browser_version = "67.x"
 
+            #Can support multiple ways to input data
+            #appevent.custom_properties = CustomData("Custom Data holder!")
+            #appevent.custom_properties.string_data = CustomStringData("Custom String Data 1",
+            #                                                          "Custom String Data 2")
+            #appevent.custom_properties.string_data.custom_data3 = "More Custom Data!"
+            appevent.event_user = "john@traker.io"
+            appevent.event_session = "6"
 
+            appevent.context_operation_time_millis = 1000
+            appevent.context_device = "pc"
+            appevent.context_app_sku = "mobile"
+            appevent.context_tags = ["client, frontend"]
+
+            #Send it to trakerr
+            print self.client.send_event(appevent)
 if __name__ == '__main__':
     unittest.main()
