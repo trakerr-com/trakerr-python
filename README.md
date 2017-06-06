@@ -1,9 +1,25 @@
 # Trakerr - Python API client
+
 Get your application events and errors to Trakerr via the *Trakerr API*.
 
-You will need your API key to send events to trakerr.
+You can send both errors and non-errors (plain log statements, for example) to Trakerr with this API.
 
-## Requirements
+## Overview
+
+The **3-minute integration guide** is primarily oriented around sending errors or warnings and does not allow you to specify additional
+parameters. The logging handler also has the ability to specify the log level that then controls whether infos or debugs are also sent.
+
+For sending additional parameters, **Option-4 in the detailed integration guide** describes how you could send non-errors along with additional parameters.
+
+The SDK takes performance impact seriously and all communication between the SDK <=> Trakerr avoids blocking the calling function. The SDK also applies asynchronous patterns where applicable.
+
+A Trakerr *Event* can consist of various parameters as described here in [AppEvent](https://github.com/trakerr-com/trakerr-python/blob/master/generated/docs/AppEvent.md).
+Some of these parameters are populated by default and others are optional and can be supplied by you.
+
+Since some of these parameters are common across all event's, the API has the option of setting these on the
+TrakerrClient instance (described towards the bottom) and offers a factory API for creating AppEvent's.
+
+### Requirements
 Python 2.7.9+ and 3.4+
 
 ## 3-minute Integration Guide
