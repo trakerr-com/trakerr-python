@@ -1,0 +1,8 @@
+language: python
+python:
+  - "2.7.9"
+  - "3.4"
+# command to install dependencies
+install: "pip install -r requirements.txt"
+# command to run tests
+script: python test/test_send_event.py
