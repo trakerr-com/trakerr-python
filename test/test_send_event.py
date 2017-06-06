@@ -70,6 +70,6 @@ class TestStackTraceLine(unittest.TestCase):
             appevent.context_tags = ["client, frontend"]
 
             #Send it to trakerr
-            print self.client.send_event(appevent)
+            print str(self.client.send_event(appevent))
 if __name__ == '__main__':
     unittest.main()
