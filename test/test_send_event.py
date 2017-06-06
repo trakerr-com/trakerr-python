@@ -24,27 +24,39 @@
 
 from __future__ import absolute_import
 
-import os
-import sys
+import time
 import unittest
 
-#from trakerr import Trakerr
+from trakerr import Trakerr
+from trakerr import TrakerrClient
 
 class TestStackTraceLine(unittest.TestCase):
     """ StackTraceLine unit test stubs """
 
     def setUp(self):
-        pass
+        self.logger = Trakerr.get_logger("898152e031aadc285c3d84aeeb3c1e386735434729425", "Python", "newlogger")
 
     def tearDown(self):
-        pass
+        TrakerrClient.shutdown()
 
-    def test_send(self):
+    def test_error(self):
         """
-        Test send
+        Test error
         """
-        self.assertTrue(5 == 5)
+        time.sleep(3)
 
+        #Built in python handler
+        try:
+            raise ArithmeticError("Exception")
+        except:
+            self.logger.exception("Corrupt file.")
+
+def callback(response):
+    """
+    Callback method for the send_event_async function. Currently outputs nothing.
+    :param response: message returned after the async call is completed.
+    """
+    pass
 
 
 if __name__ == '__main__':
