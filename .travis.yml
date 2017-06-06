@@ -12,3 +12,4 @@ script: python test/test_send_event.py
 notifications:
   email: false
   #Add slack notifications instead when slack comes back up.
+  slack: trakerr:vrFTXvCHJrNvWsMHWg80gL5B
