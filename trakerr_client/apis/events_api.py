@@ -75,8 +75,8 @@ class EventsApi(object):
         if kwargs.get('callback'):
             return self.events_post_with_http_info(data, **kwargs)
         else:
-            data, response = self.events_post_with_http_info(data, **kwargs)[:2]
-            return (data, response)
+            (data) = self.events_post_with_http_info(data, **kwargs)
+            return data
 
     def events_post_with_http_info(self, data, **kwargs):
         """
@@ -94,7 +94,7 @@ class EventsApi(object):
         :param callback function: The callback function
             for asynchronous request. (optional)
         :param AppEvent data: Event to submit (required)
-        :return: None
+        :return: Response if syncronous
                  If the method is called asynchronously,
                  returns the request thread.
         """
