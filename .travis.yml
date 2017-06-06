@@ -5,10 +5,9 @@ python:
 # command to install dependencies
 # Make sure to change the branch name if you're not making a PR off the develop branch.
 install: 
-  - "pip install -r requirements.txt"
   - "pip install git+https://github.com/trakerr-com/trakerr-python.git@develop"
 # command to run tests
-script: "python test/test_send_event.py"
+script: python test/test_send_event.py
 
 notifications:
   email: false
