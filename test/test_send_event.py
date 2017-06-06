@@ -28,9 +28,6 @@ import os
 import sys
 import unittest
 
-import trakerr_client
-
-
 class TestStackTraceLine(unittest.TestCase):
     """ StackTraceLine unit test stubs """
 
