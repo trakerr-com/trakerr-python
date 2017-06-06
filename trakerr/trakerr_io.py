@@ -206,7 +206,7 @@ class TrakerrClient(object):
             raise TypeError("Argument is expected of class AppEvent.")
 
         self.fill_defaults(app_event)
-        return self._events_api.events_post_with_http_info(app_event)
+        return self._events_api.events_post(app_event)
 
     def send_event_async(self, app_event, call_back=None):
         """
@@ -223,7 +223,7 @@ class TrakerrClient(object):
             call_back = async_callback
 
         self.fill_defaults(app_event)
-        self._events_api.events_post_with_http_info(app_event, callback=call_back)
+        self._events_api.events_post(app_event, callback=call_back)
 
     def log(self, arg_dict, log_level="error", classification="issue", exc_info=True):
         """
