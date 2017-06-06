@@ -232,8 +232,8 @@ Name | Type | Description | Notes
 **context\_appbrowser\_version** | **string** | An optional string browser version the application is running on. | Defaults to `None`
 **context\_data\_center** | **string** | Data center the application is running on or connected to. | Defaults to `None`
 **context\_data\_center\_region** | **string** | Data center region. | Defaults to `None`
-**context\_app\_sku** | **str** | (optional) Application SKU | Defaults to `None`
-**context_tags** | **str** | (optional) Application SKU | Defaults to `[]`
+**context\_app\_sku** | **string** | (optional) Application SKU | Defaults to `None`
+**context_tags** | **List[Strings]** | (optional) List of strings tags to classify the loggers purpose (IE: modules, submodules, ect) | Defaults to `[]`
 
 ## Advanced pip install commands for Trakerr
 You can run the following command to update an exsisting installation to the latest commit on master:
