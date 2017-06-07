@@ -37,7 +37,7 @@ class TestTrakerrIO(unittest.TestCase):
     def setUp(self):
         tdo = datetime.utcnow() - TrakerrClient.EPOCH_CONSTANT
         ver = " ".join(("Python", str(tdo.total_seconds() * 1000)))
-        self.client = TrakerrClient("898152e031aadc285c3d84aeeb3c1e386735434729425", ver, "newlogger")
+        self.client = TrakerrClient("898152e031aadc285c3d84aeeb3c1e386735434729425", ver, "CICD Tests")
 
     def tearDown(self):
         TrakerrClient.shutdown()
