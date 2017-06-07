@@ -2,6 +2,12 @@ language: python
 python:
   - "2.7.9"
   - "3.4"
+
+branches:
+  only:
+  - master
+  - develop
+
 # command to install dependencies
 # Make sure to change the branch name if you're not making a PR off the develop branch.
 install: 
