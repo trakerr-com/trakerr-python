@@ -1,5 +1,7 @@
 # Trakerr - Python API client
 
+[![Build Status](https://travis-ci.org/trakerr-com/trakerr-python.svg?branch=master)](https://travis-ci.org/trakerr-com/trakerr-python)
+
 Get your application events and errors to Trakerr via the *Trakerr API*.
 
 You can send both errors and non-errors (plain log statements, for example) to Trakerr with this API.
