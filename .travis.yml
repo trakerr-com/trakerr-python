@@ -6,7 +6,6 @@ python:
 branches:
   only:
   - master
-  - develop
 
 # command to install dependencies
 # Make sure to change the branch name if you're not making a PR off the develop branch.
