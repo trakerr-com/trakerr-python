@@ -97,8 +97,8 @@ def main(argv=None):
 
         appevent.context_operation_time_millis = 1000
         appevent.context_device = "pc"
-        appevent.context_app_sku = "mobile"
-        appevent.context_tags = ["client, frontend"]
+        appevent.context_app_sku = "Lenovo PC"
+        appevent.context_tags = ["client", "frontend"]
 
         #Send it to trakerr
         client.send_event_async(appevent)

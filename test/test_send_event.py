@@ -56,7 +56,7 @@ class TestTrakerrIO(unittest.TestCase):
             appevent.context_operation_time_millis = 2000
             appevent.context_device = "pc"
             appevent.context_app_sku = "mobile"
-            appevent.context_tags = ["client, frontend"]
+            appevent.context_tags = ["client", "frontend"]
 
             response = self.client.send_event(appevent)
             self.assertIs(response[0], None)
@@ -76,7 +76,7 @@ class TestTrakerrIO(unittest.TestCase):
             appevent.context_operation_time_millis = 2000
             appevent.context_device = "pc"
             appevent.context_app_sku = "mobile"
-            appevent.context_tags = ["client, frontend"]
+            appevent.context_tags = ["client", "frontend"]
 
             response = self.client.send_event(appevent)
             self.assertIs(response[0], None)
@@ -96,7 +96,7 @@ class TestTrakerrIO(unittest.TestCase):
             appevent.context_operation_time_millis = 2000
             appevent.context_device = "pc"
             appevent.context_app_sku = "mobile"
-            appevent.context_tags = ["client, frontend"]
+            appevent.context_tags = ["client", "frontend"]
 
             response = self.client.send_event(appevent)
             self.assertIs(response[0], None)
@@ -126,7 +126,7 @@ class TestTrakerrIO(unittest.TestCase):
                 appevent.context_operation_time_millis = 2000
                 appevent.context_device = "pc"
                 appevent.context_app_sku = "mobile"
-                appevent.context_tags = ["client, frontend"]
+                appevent.context_tags = ["client", "frontend"]
 
                 #Send it to trakerr
                 response = self.client.send_event(appevent)
@@ -162,7 +162,7 @@ class TestTrakerrIO(unittest.TestCase):
                 appevent.context_operation_time_millis = 1000
                 appevent.context_device = "pc"
                 appevent.context_app_sku = "mobile"
-                appevent.context_tags = ["client, frontend"]
+                appevent.context_tags = ["client", "frontend"]
 
                 #Send it to trakerr
                 response = self.client.send_event(appevent)
